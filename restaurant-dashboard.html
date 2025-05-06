@@ -1,0 +1,309 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Restaurant Signup</title>
+    <link rel="stylesheet" href="styles.css" />
+    <link rel="stylesheet" href="css/header.css">
+  </head>
+  <style>
+    /* body {
+      font-family: Arial, sans-serif;
+      background-color: #f8f9fa;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      margin: 0;
+    } */
+
+    .container {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      width: 100%;
+    }
+
+    .signup-card {
+      background: #fff;
+      padding: 30px;
+      border-radius: 12px;
+      box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
+      text-align: center;
+      max-width: 400px;
+      width: 100%;
+    }
+
+    .signup-card input,
+    .signup-card select {
+      width: 100%;
+      padding: 10px;
+      margin: 8px 0;
+      border: 1px solid #ccc;
+      border-radius: 6px;
+      font-size: 16px;
+    }
+
+    .signup-card button {
+      width: 100%;
+      padding: 12px;
+      background-color: #ff6600;
+      color: white;
+      border: none;
+      border-radius: 6px;
+      font-size: 18px;
+      cursor: pointer;
+      transition: background 0.3s ease;
+    }
+
+    .signup-card button:hover {
+      background-color: #e65c00;
+    }
+
+    .signup-card p {
+      margin-top: 15px;
+    }
+
+    .signup-card a {
+      color: #ff6600;
+      text-decoration: none;
+      font-weight: bold;
+    }
+
+    .signup-card a:hover {
+      text-decoration: underline;
+    }
+  </style>
+  <body>
+    <header>
+      <div class="nav-container">
+        
+        <!-- Logo -->
+        <div class="logo">
+          <i>🍴</i> <strong>Online Food</strong>
+        </div>
+        
+        <!-- Menu Toggle Button for Mobile (no change here) -->
+        <div class="menu-toggle" id="menu-toggle">☰</div>
+        
+        <!-- Navbar (add 'nav' tag and keep the ID as it is) -->
+        <nav id="navbar">
+          <ul>
+            <li><a href="#">HOME</a></li>
+            <li><a href="#about-section">ABOUT</a></li>
+            <li><a href="#">CONTACT</a></li>
+            
+            <!-- Login dropdown (just wrap it nicely like below) -->
+            <li class="login-dropdown">
+              <a href="#" onclick="logout()">👤 Logout</a>
+             
+            </li>
+          </ul>
+        </nav>
+    
+      </div>
+    </header>
+    <div class="container">
+      <div class="signup-card">
+        <h2>🍽️ Restaurant Registration</h2>
+        <form id="restaurant-signup-form">
+          <input
+            type="text"
+            id="restaurant-name"
+            placeholder="Restaurant Name"
+            required
+            readonly
+          />
+          <input
+            type="file"
+            id="restaurant-image"
+            accept="image/*"
+            placeholder="upload Your Image"
+          />
+          <select id="restaurant-rating" required>
+            <option value="">Select Rating</option>
+            <option value="1">⭐ 1 Star</option>
+            <option value="2">⭐⭐ 2 Stars</option>
+            <option value="3">⭐⭐⭐ 3 Stars</option>
+            <option value="4">⭐⭐⭐⭐ 4 Stars</option>
+            <option value="5">⭐⭐⭐⭐⭐ 5 Stars</option>
+          </select>
+          <!-- <input type="time" id="opening-time" required> -->
+          <input
+            type="text"
+            id="restaurant-location"
+            placeholder="Location"
+            required
+          />
+          <input
+            type="email"
+            id="signup-email"
+            placeholder="Gmail"
+            required
+            required
+          />
+
+          <p id="match"></p>
+          <button type="submit">Update</button>
+        </form>
+      </div>
+    </div>
+    <script>
+      // document.getElementById("mobileMenu").classList.toggle("active");
+
+      function Restaurant() {
+        let RestaurantData = JSON.parse(localStorage.getItem("owners"));
+        console.log(RestaurantData);
+
+        if (RestaurantData) {
+          document.getElementById("restaurant-name").value =
+            RestaurantData.restaurantName || "";
+          document.getElementById("signup-email").value =
+            RestaurantData.email || "";
+        }
+      }
+
+      document.addEventListener("DOMContentLoaded", Restaurant);
+    </script>
+
+    <script type="module">
+      import { initializeApp } from "https://www.gstatic.com/firebasejs/11.5.0/firebase-app.js";
+      import {
+        getAuth,
+        createUserWithEmailAndPassword,
+      } from "https://www.gstatic.com/firebasejs/11.5.0/firebase-auth.js";
+      import {
+        getFirestore,
+        updateDoc,
+        doc,
+      } from "https://www.gstatic.com/firebasejs/11.5.0/firebase-firestore.js";
+      import {
+        getStorage,
+        ref,
+        uploadBytes,
+        getDownloadURL,
+      } from "https://www.gstatic.com/firebasejs/11.5.0/firebase-storage.js";
+
+      const firebaseConfig = {
+        apiKey: "AIzaSyDmv_JzNAjosccdLlhaAvdHidcQXbl2yeE",
+        authDomain: "online-food-ordering-e8513.firebaseapp.com",
+        projectId: "online-food-ordering-e8513",
+        storageBucket: "online-food-ordering-e8513.appspot.com",
+        messagingSenderId: "498101486818",
+        appId: "1:498101486818:web:474691ca84d07b01ebcabb",
+        measurementId: "G-WB3NM7E4DZ",
+      };
+
+      const app = initializeApp(firebaseConfig);
+      const auth = getAuth(app);
+      const db = getFirestore(app);
+      const storage = getStorage(app);
+
+      // Get form elements
+
+      let RestaurantData = JSON.parse(localStorage.getItem("owners"));
+
+      // const confirmPasswordInput = document.getElementById("confirm-password");
+      const signupForm = document.getElementById("restaurant-signup-form");
+
+      signupForm.addEventListener("submit", async (e) => {
+        console.log("just trail");
+        e.preventDefault();
+        const restaurantName = document.getElementById("restaurant-name").value;
+
+       
+
+        const restaurantRating =
+          document.getElementById("restaurant-rating").value;
+        // const openingTimeInput = document.getElementById("opening-time").value;
+        const restaurantLocation = document.getElementById(
+          "restaurant-location"
+        ).value;
+        const email = document.getElementById("signup-email").value;
+        const match = document.getElementById("match");
+        // const itemName =[]
+        const file = document.getElementById("restaurant-image").files[0];
+
+        try {
+          console.log(RestaurantData);
+          // console.log(RestaurantData.id);
+          const restaurantImage = await uploadImageToCloudinary(file);
+
+          if (RestaurantData && RestaurantData.id) {
+            const ownerRef = doc(db, "owners", RestaurantData.id);
+
+            await updateDoc(ownerRef, {
+              restaurantName: restaurantName,
+              restaurantImage: restaurantImage,
+              restaurantRating: restaurantRating,
+              itemName: [],
+              restaurantLocation: restaurantLocation, // ✅ and this one too
+              email: email,
+              updatedAt: new Date(),
+            });
+            localStorage.setItem(
+              "owners",
+              JSON.stringify({
+                id: RestaurantData.id,
+                restaurantName,
+                restaurantImage: restaurantImage,
+                restaurantRating,
+                itemName: [],
+
+                restaurantLocation,
+                email,
+              })
+            );
+
+            alert("Restaurant details updated successfully!");
+            window.location.href = "restaurant-data-display.html"; // Redirect to homepage
+          } else {
+            alert("Error: No  data found.");
+          }
+        } catch (error) {
+          console.log(error);
+          document.getElementById("match").innerText = error.message;
+        }
+      });
+      async function uploadImageToCloudinary(file) {
+        const formData = new FormData();
+        formData.append("file", file);
+        formData.append("upload_preset", "restaurant_profile");
+
+        const response = await fetch(
+          "https://api.cloudinary.com/v1_1/dtnv89alf/image/upload",
+          {
+            method: "POST",
+            body: formData,
+          }
+        );
+        const data = await response.json();
+
+        if (!data.secure_url) throw new Error("Image uploaded failed");
+        return data.secure_url;
+      }
+
+
+
+    
+
+
+
+    </script>
+    <script>
+      function logout()
+    {
+        const confirmLogout=confirm("Are You Sure To Logout")
+        if(confirmLogout)
+        {
+            localStorage.removeItem("owners")
+             window.location.href="index.html" 
+        }
+        
+     
+    }
+    </script>
+    <script src="header1.js"></script>
+  </body>
+</html>

@@ -1,0 +1,388 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <link rel="stylesheet" href="css/cart.css">
+  </head>
+
+  <style>
+    /* RESET & BASE */
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: "Segoe UI", sans-serif;
+      background: #fff;
+      color: #333;
+      padding-top: 90px;
+    }
+
+    /* HEADER */
+    header {
+      position: fixed;
+      top: 0;
+      width: 100%;
+      background: linear-gradient(to right, #ff6f61);
+      color: white;
+      box-shadow: 0 4px 10px rgba(231, 144, 144, 0.1);
+      z-index: 1000;
+    }
+
+    /* NAV CONTAINER */
+    .nav-container {
+      max-width: 1200px;
+      margin: auto;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 15px 20px;
+      flex-wrap: wrap;
+    }
+
+    /* LOGO */
+    .logo {
+      font-size: 1.8rem;
+      font-weight: bold;
+      color: #fff;
+    }
+
+    /* NAVIGATION */
+    nav ul {
+      list-style: none;
+      display: flex;
+      gap: 30px;
+    }
+
+    nav ul li {
+      position: relative;
+    }
+
+    nav a {
+      text-decoration: none;
+      color: #fff;
+      font-weight: 500;
+      font-size: 1rem;
+      padding: 8px 14px;
+      border-radius: 6px;
+      transition: all 0.3s ease;
+    }
+
+    nav a:hover {
+      background: rgba(198, 137, 87, 0.2);
+    }
+
+    /* DROPDOWN */
+    .login-dropdown .dropdown-menu {
+      display: none;
+      position: absolute;
+      top: 45px;
+      background: #ffffff;
+      color: #333;
+      border-radius: 6px;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+      padding: 10px 0;
+      min-width: 160px;
+    }
+
+    .login-dropdown:hover .dropdown-menu {
+      display: block;
+    }
+
+    .dropdown-menu a {
+      color: #333;
+      padding: 10px 20px;
+      display: block;
+      text-decoration: none;
+      font-size: 0.95rem;
+    }
+
+    .dropdown-menu a:hover {
+      background-color: #f4f4f4;
+    }
+
+    /* CART ICON */
+    .cart-icon {
+      background: white;
+      color: #ff6f61;
+      padding: 8px 16px;
+      border-radius: 30px;
+      font-weight: bold;
+      font-size: 1rem;
+      cursor: pointer;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+      transition: 0.3s ease;
+    }
+
+    .cart-icon:hover {
+      background: #e6f0ff;
+    }
+
+    #cart-count {
+      background: #ff3b3b;
+      color: white;
+      padding: 3px 8px;
+      border-radius: 50%;
+      font-size: 0.75rem;
+      margin-left: 6px;
+    }
+
+    /* MENU TOGGLE (for mobile) */
+    .menu-toggle {
+      font-size: 28px;
+      display: none;
+      cursor: pointer;
+      color: white;
+    }
+
+    /* RESPONSIVE */
+    @media (max-width: 768px) {
+      .menu-toggle {
+        display: block;
+      }
+
+      .menu-toggle {
+        font-size: 30px;
+        cursor: pointer;
+        position: absolute;
+        right: 10px; /* Position the icon to the right */
+        top: 20px; /* You can adjust this value to align the icon vertically as needed */
+      }
+
+      .nav-container {
+        flex-direction: column;
+        align-items: flex-start;
+      }
+
+      nav {
+        display: none;
+        width: 100%;
+        margin-top: 10px;
+      }
+
+      nav.active {
+        display: block;
+      }
+
+      nav ul {
+        flex-direction: column;
+        gap: 10px;
+        background: #ff6f61;
+        padding: 15px 20px;
+        border-radius: 8px;
+        width: 100%;
+      }
+
+      nav ul li {
+        width: 100%;
+      }
+
+      nav ul li a {
+        display: block;
+        width: 100%;
+        padding: 12px 15px;
+        background-color: #ff6f61;
+        border-radius: 5px;
+        color: white;
+        font-weight: 500;
+      }
+
+      nav ul li a:hover {
+        background-color: #e65c48; /* Slightly darker hover effect */
+      }
+
+      .dropdown-menu {
+        position: static;
+        box-shadow: none;
+        background: #e0f7ff;
+        border-radius: 6px;
+        margin-top: 5px;
+      }
+
+      .cart-icon {
+        align-self: flex-end;
+        margin-top: 15px;
+      }
+    }
+  </style>
+  <body>
+    <header>
+      <div class="nav-container">
+        <div class="logo"><i>🍴</i> <strong>Online Food</strong></div>
+        <div class="menu-toggle" id="menu-toggle">☰</div>
+        <nav id="navbar">
+          <ul>
+            <li><a href="#">HOME</a></li>
+            <li><a href="#about-section">ABOUT</a></li>
+            <li><a href="#contact">CONTACT</a></li>
+            <li class="login-dropdown">
+              <a href="#" onclick="logout()">👤 Logout</a>
+            </li>
+            <li>
+              <div id="cart-icon" class="cart-icon">
+                🛒 Cart <span id="cart-count">0</span>
+              </div>
+            </li>
+          </ul>
+        </nav>
+      </div>
+    </header>
+
+    <div class="goto-btn-container">
+      <button
+        id="gotoItemsBtn"
+        onclick="location.href='user-display-items.html'"
+      >
+        🛒 Go to Your Items
+      </button>
+    </div>
+
+    <!-- <div id="menu"></div> -->
+
+    <hr />
+
+    <h2>🛒 Your Cart</h2>
+    <div id="cartContainer"></div>
+    <div id="totalPrice"></div>
+
+    <div style="text-align: center">
+      <button id="placeOrderBtn" onclick="placeorder()">Place Order</button>
+    </div>
+
+    <script src="css/cartheader.js"></script>
+    <script type="module">
+      import { initializeApp } from "https://www.gstatic.com/firebasejs/11.5.0/firebase-app.js";
+      import {
+        getFirestore,
+        collection,
+        getDocs,
+      } from "https://www.gstatic.com/firebasejs/11.5.0/firebase-firestore.js";
+
+      const firebaseConfig = {
+        apiKey: "AIzaSyDmv_JzNAjosccdLlhaAvdHidcQXbl2yeE",
+        authDomain: "online-food-ordering-e8513.firebaseapp.com",
+        projectId: "online-food-ordering-e8513",
+        storageBucket: "online-food-ordering-e8513.appspot.com",
+        messagingSenderId: "498101486818",
+        appId: "1:498101486818:web:474691ca84d07b01ebcabb",
+        measurementId: "G-WB3NM7E4DZ",
+      };
+
+      const app = initializeApp(firebaseConfig);
+      const db = getFirestore(app);
+
+      const menuDiv = document.getElementById("menu");
+
+      const restaurantsRef = collection(db, "restaurants");
+      getDocs(restaurantsRef).then((snapshot) => {
+        snapshot.forEach((doc) => {
+          const restaurant = doc.data();
+          const restaurantName = restaurant.name || "Unknown Restaurant";
+
+          if (Array.isArray(restaurant.items)) {
+            restaurant.items.forEach((item) => {
+              if (item.name && item.price != null) {
+                const price = Number(item.price);
+                showItem(item.name, price, restaurantName);
+              }
+            });
+          }
+        });
+      });
+
+      function showItem(
+        name = "Unnamed",
+        price = 0,
+        restaurantName = "Unknown",
+        quantity = 1
+      ) {
+        const itemCard = document.createElement("div");
+        itemCard.className = "item-card";
+        itemCard.innerHTML = `
+        <h3>${name}</h3>
+        <p>From: <strong>${restaurantName}</strong></p>
+        <p>Price: ₹${price}</p>
+        <button onclick="addToCart('${name}', ${price},${quantity})">Add to Cart</button>
+      `;
+        menuDiv.appendChild(itemCard);
+      }
+
+      window.addToCart = function (itemName, itemPrice, quantity) {
+        let cart = JSON.parse(localStorage.getItem("cart")) || [];
+        const existingItem = cart.find((item) => item.itemName === itemName);
+        console.log(existingItem);
+
+        if (!existingItem) {
+          existingItem.quantity += 1;
+        } else {
+          cart.push({ itemName, itemPrice, quantity: quantity });
+        }
+
+        localStorage.setItem("cart", JSON.stringify(cart));
+        displayCart();
+      };
+
+      window.placeorder = function () {
+        window.location.href = "user-address-details.html";
+      };
+
+      window.displayCart = function () {
+        const cart = JSON.parse(localStorage.getItem("cart")) || [];
+        const cartContainer = document.getElementById("cartContainer");
+        cartContainer.innerHTML = "";
+
+        cart.forEach((item, index) => {
+          console.log(item);
+
+          const itemDiv = document.createElement("div");
+          itemDiv.className = "cart-item";
+          itemDiv.innerHTML = `
+          <div class="cart-item-info">
+            <strong>${item.name}</strong><br>
+            ₹${item.price} × ${item.quantity} = ₹${item.price * item.quantity}
+          </div>
+          <div class="quantity-control">
+            <button onclick="updateQuantity(${index}, -1)">-</button>
+            <span>${item.quantity}</span>
+            <button onclick="updateQuantity(${index}, 1)">+</button>
+          </div>
+        `;
+          cartContainer.appendChild(itemDiv);
+        });
+
+        calculateTotal();
+      };
+
+      window.updateQuantity = function (index, change) {
+        let cart = JSON.parse(localStorage.getItem("cart")) || [];
+        if (cart[index]) {
+          cart[index].quantity += change;
+          if (cart[index].quantity <= 0) {
+            cart.splice(index, 1);
+          }
+          localStorage.setItem("cart", JSON.stringify(cart));
+          displayCart();
+        }
+      };
+
+      function calculateTotal() {
+        const cart = JSON.parse(localStorage.getItem("cart")) || [];
+        let total = 0;
+        cart.forEach((item) => {
+          total += item.price * item.quantity;
+        });
+        document.getElementById(
+          "totalPrice"
+        ).innerText = `Total Price: ₹${total}`;
+      }
+
+      window.onload = displayCart;
+    </script>
+
+    <script src="updateCartAndLogout.js"></script>
+  </body>
+</html>

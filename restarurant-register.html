@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Restaurant Signup</title>
+    <!-- <link rel="stylesheet" href="styles.css" /> -->
+    <!-- External CSS -->
+  </head>
+  <link rel="stylesheet" href="css/header.css">
+  <style>
+    
+
+    /* Center the form */
+    .container {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      width: 100%;
+    }
+
+    /* Card-style signup form */
+    .signup-card {
+      background: #fff;
+      padding: 30px;
+      border-radius: 12px;
+      box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
+      text-align: center;
+      max-width: 400px;
+      margin-top: 5%;
+      width: 100%;
+    }
+
+    /* Input fields */
+    .signup-card input {
+      width: 100%;
+      padding: 12px;
+      margin: 10px 0;
+      border: 1px solid #ccc;
+      border-radius: 6px;
+      font-size: 16px;
+    }
+
+    /* Submit button */
+    .signup-card button {
+      width: 100%;
+      padding: 12px;
+      background-color: #ff6600;
+      color: white;
+      border: none;
+      border-radius: 6px;
+      font-size: 18px;
+      cursor: pointer;
+      transition: background 0.3s ease;
+    }
+
+    /* Hover effect */
+    .signup-card button:hover {
+      background-color: #e65c00;
+    }
+
+    /* Link styling */
+    .signup-card p {
+      margin-top: 15px;
+    }
+
+    .signup-card a {
+      color: #ff6600;
+      text-decoration: none;
+      font-weight: bold;
+    }
+
+    .signup-card a:hover {
+      text-decoration: underline;
+    }
+  </style>
+  <body>
+    <header>
+      <div class="nav-container">
+        
+        <!-- Logo -->
+        <div class="logo">
+          <i>🍴</i> <strong>Online Food</strong>
+        </div>
+        
+        <!-- Menu Toggle Button for Mobile (no change here) -->
+        <div class="menu-toggle" id="menu-toggle">☰</div>
+        
+        <!-- Navbar (add 'nav' tag and keep the ID as it is) -->
+        <nav id="navbar">
+          <ul>
+            <li><a href="./index.html">HOME</a></li>
+            <li><a href="./index.html">ABOUT</a></li>
+            <li><a href="#">CONTACT</a></li>
+            
+            <!-- Login dropdown (just wrap it nicely like below) -->
+            <li class="login-dropdown">
+              <a href="#">👤 Login</a>
+              <div class="dropdown-menu">
+                <a href="user-registration.html">👤 User</a>
+                <a href="../restarurant-register.html">🏪 Restaurant Owner</a>
+              </div>
+            </li>
+          </ul>
+        </nav>
+    
+      </div>
+    </header>
+
+
+    <div class="container">
+      <div class="signup-card">
+        <h2>🍽️ Restaurant Registration</h2>
+        <form id="restaurant-signup-form">
+          <input
+            type="text"
+            id="restaurant-name"
+            placeholder="Restaurant Name"
+            required
+          />
+          <input type="email" id="signup-email" placeholder="Gmail" required />
+          <input
+            type="password"
+            id="signup-password"
+            placeholder="Password"
+            required
+          />
+          <input
+            type="password"
+            id="confirm-password"
+            placeholder="Confirm Password"
+            required
+          />
+          <p id="match"></p>
+          <button type="submit">Register</button>
+        </form>
+
+        <p>
+          Already have an account? <a href="restaurant-login.html">Login</a>
+        </p>
+      </div>
+    </div>
+
+    <script type="module">
+      import { initializeApp } from "https://www.gstatic.com/firebasejs/11.5.0/firebase-app.js";
+      import {
+        getAuth,
+        createUserWithEmailAndPassword,
+        signInWithEmailAndPassword,
+      } from "https://www.gstatic.com/firebasejs/11.5.0/firebase-auth.js";
+      import {
+        getFirestore,
+        setDoc,
+        doc,
+      } from "https://www.gstatic.com/firebasejs/11.5.0/firebase-firestore.js";
+
+      const firebaseConfig = {
+        apiKey: "AIzaSyDmv_JzNAjosccdLlhaAvdHidcQXbl2yeE",
+        authDomain: "online-food-ordering-e8513.firebaseapp.com",
+        projectId: "online-food-ordering-e8513",
+        storageBucket: "online-food-ordering-e8513.appspot.com",
+        messagingSenderId: "498101486818",
+        appId: "1:498101486818:web:474691ca84d07b01ebcabb",
+        measurementId: "G-WB3NM7E4DZ",
+      };
+
+      const app = initializeApp(firebaseConfig);
+      const auth = getAuth(app);
+      const db = getFirestore(app);
+
+      // Get form elements
+      const signupForm = document.getElementById("restaurant-signup-form");
+      const restaurantNameInput = document.getElementById("restaurant-name");
+      const emailInput = document.getElementById("signup-email");
+      const passwordInput = document.getElementById("signup-password");
+      const confirmPasswordInput = document.getElementById("confirm-password");
+
+      signupForm.addEventListener("submit", async (e) => {
+        e.preventDefault();
+
+        const restaurantName = restaurantNameInput.value;
+        const email = emailInput.value;
+        const password = passwordInput.value;
+        const confirmPassword = confirmPasswordInput.value;
+
+        if (password == confirmPassword) {
+          try {
+            const userCredential = await createUserWithEmailAndPassword(
+              auth,
+              email,
+              password
+            );
+            const user = userCredential.user;
+
+            await setDoc(doc(db, "owners", user.uid), {
+              id:user.uid,
+              restaurantName: restaurantNameInput.value,
+              email: emailInput.value,
+              role:"restaurantowner",
+              createdAt: new Date(),
+            });
+            console.log("hi frinzzz");
+            alert("Signup Succesfully");
+            window.location.href = "restaurant-login.html";
+          } catch (err) {
+            match.innerText = err.message;
+          }
+        } else {
+          match.innerText = "Passwords are doesnot match";
+        }
+      });
+    </script>
+    <script src="header1.js"></script>
+  </body>
+</html>

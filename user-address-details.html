@@ -1,0 +1,302 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Address</title>
+    <style>
+      /* RESET & BASE */
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+
+      body {
+        font-family: "Segoe UI", sans-serif;
+        background: #fff;
+        color: #333;
+        padding-top: 90px;
+      }
+
+      /* HEADER */
+      header {
+        position: fixed;
+        top: 0;
+        width: 100%;
+        background: linear-gradient(to right, #ff6f61);
+        color: white;
+        box-shadow: 0 4px 10px rgba(231, 144, 144, 0.1);
+        z-index: 1000;
+      }
+
+      /* NAV CONTAINER */
+      .nav-container {
+        max-width: 1200px;
+        margin: auto;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 15px 20px;
+        flex-wrap: wrap;
+      }
+
+      /* LOGO */
+      .logo {
+        font-size: 1.8rem;
+        font-weight: bold;
+        color: #fff;
+      }
+
+      /* NAVIGATION */
+      nav ul {
+        list-style: none;
+        display: flex;
+        gap: 30px;
+      }
+
+      nav ul li {
+        position: relative;
+      }
+
+      nav a {
+        text-decoration: none;
+        color: #fff;
+        font-weight: 500;
+        font-size: 1rem;
+        padding: 8px 14px;
+        border-radius: 6px;
+        transition: all 0.3s ease;
+      }
+
+      nav a:hover {
+        background: rgba(198, 137, 87, 0.2);
+      }
+
+      /* DROPDOWN */
+      .login-dropdown .dropdown-menu {
+        display: none;
+        position: absolute;
+        top: 45px;
+        background: #ffffff;
+        color: #333;
+        border-radius: 6px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        padding: 10px 0;
+        min-width: 160px;
+      }
+
+      .login-dropdown:hover .dropdown-menu {
+        display: block;
+      }
+
+      .dropdown-menu a {
+        color: #333;
+        padding: 10px 20px;
+        display: block;
+        text-decoration: none;
+        font-size: 0.95rem;
+      }
+
+      .dropdown-menu a:hover {
+        background-color: #f4f4f4;
+      }
+
+      /* CART ICON */
+      .cart-icon {
+        background: white;
+        color: #ff6f61;
+        padding: 8px 16px;
+        border-radius: 30px;
+        font-weight: bold;
+        font-size: 1rem;
+        cursor: pointer;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        transition: 0.3s ease;
+      }
+
+      .cart-icon:hover {
+        background: #e6f0ff;
+      }
+
+      #cart-count {
+        background: #ff3b3b;
+        color: white;
+        padding: 3px 8px;
+        border-radius: 50%;
+        font-size: 0.75rem;
+        margin-left: 6px;
+      }
+
+      /* MENU TOGGLE (for mobile) */
+      .menu-toggle {
+        font-size: 28px;
+        display: none;
+        cursor: pointer;
+        color: white;
+      }
+
+      section {
+        font-family: "Segoe UI", sans-serif;
+        background-color: #fff8f0;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 100vh;
+      }
+      .address-box {
+        background: #fff;
+        padding: 30px;
+        border-radius: 12px;
+        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        width: 350px;
+      }
+      .address-box h2 {
+        text-align: center;
+        margin-bottom: 20px;
+        color: #ff5e57;
+      }
+      .address-box input {
+        width: 100%;
+        padding: 12px;
+        margin-bottom: 12px;
+        border: 1px solid #ddd;
+        border-radius: 6px;
+      }
+      .address-box button {
+        width: 100%;
+        padding: 12px;
+        background: #ff5e57;
+        color: white;
+        border: none;
+        border-radius: 6px;
+        font-size: 16px;
+        cursor: pointer;
+      }
+
+      /* RESPONSIVE */
+      @media (max-width: 768px) {
+        .menu-toggle {
+          display: block;
+        }
+
+        .menu-toggle {
+          font-size: 30px;
+          cursor: pointer;
+          position: absolute;
+          right: 10px; /* Position the icon to the right */
+          top: 20px; /* You can adjust this value to align the icon vertically as needed */
+        }
+
+        .nav-container {
+          flex-direction: column;
+          align-items: flex-start;
+        }
+
+        nav {
+          display: none;
+          width: 100%;
+          margin-top: 10px;
+        }
+
+        nav.active {
+          display: block;
+        }
+
+        nav ul {
+          flex-direction: column;
+          gap: 10px;
+          background: #ff6f61;
+          padding: 15px 20px;
+          border-radius: 8px;
+          width: 100%;
+        }
+
+        nav ul li {
+          width: 100%;
+        }
+
+        nav ul li a {
+          display: block;
+          width: 100%;
+          padding: 12px 15px;
+          background-color: #ff6f61;
+          border-radius: 5px;
+          color: white;
+          font-weight: 500;
+        }
+
+        nav ul li a:hover {
+          background-color: #e65c48; /* Slightly darker hover effect */
+        }
+
+        .dropdown-menu {
+          position: static;
+          box-shadow: none;
+          background: #e0f7ff;
+          border-radius: 6px;
+          margin-top: 5px;
+        }
+
+        .cart-icon {
+          align-self: flex-end;
+          margin-top: 15px;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <header>
+      <div class="nav-container">
+        <div class="logo"><i>🍴</i> <strong>Online Food</strong></div>
+        <div class="menu-toggle" id="menu-toggle">☰</div>
+        <nav id="navbar">
+          <ul>
+            <li><a href="#">HOME</a></li>
+            <li><a href="#about-section">ABOUT</a></li>
+            <li><a href="#contact">CONTACT</a></li>
+            <li class="login-dropdown">
+              <a href="#" onclick="logout()">👤 Logout</a>
+            </li>
+            <li>
+              <div id="cart-icon" class="cart-icon">
+                🛒 Cart <span id="cart-count">0</span>
+              </div>
+            </li>
+          </ul>
+        </nav>
+      </div>
+    </header>
+
+    <section>
+      <div class="address-box">
+        <h2>Delivery Address</h2>
+        <input type="text" id="name" placeholder="Your Name" required />
+        <input type="text" id="phone" placeholder="Phone Number" required />
+        <input type="text" id="line1" placeholder="Address Line 1" required />
+        <input type="text" id="line2" placeholder="Address Line 2" />
+        <input type="text" id="city" placeholder="City" required />
+        <input type="text" id="postal" placeholder="Postal Code" required />
+        <button onclick="submitAddress()">Continue to Payment</button>
+      </div>
+    </section>
+    <script>
+      function submitAddress() {
+        const address = {
+          name: document.getElementById("name").value,
+          phone: document.getElementById("phone").value,
+          line1: document.getElementById("line1").value,
+          line2: document.getElementById("line2").value,
+          city: document.getElementById("city").value,
+          postal: document.getElementById("postal").value,
+        };
+
+        // Store address in localStorage
+        localStorage.setItem("userAddress", JSON.stringify(address));
+        window.location.href = "review.html";
+      }
+    </script>
+
+    <script src="css/cartheader.js"></script>
+  </body>
+</html>

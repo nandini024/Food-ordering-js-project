@@ -1,0 +1,276 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Food Items</title>
+  <link rel="stylesheet" href="css/headercart.css">
+  <style>
+    body {
+      margin: 0;
+      padding: 0;
+      font-family: 'Segoe UI', sans-serif;
+      background-color: #fefefe;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      min-height: 100vh;
+    }
+
+    .container {
+      width: 90%;
+      max-width: 1200px;
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 4%;
+      padding: 5%;
+    }
+
+    .card {
+      background-color: #fff8f0;
+      border-radius: 12px;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+      overflow: hidden;
+      transition: transform 0.3s ease;
+    }
+
+    .card:hover {
+      transform: translateY(-5px);
+    }
+
+    .card img {
+      width: 100%;
+      height: 200px;
+      object-fit: cover;
+    }
+
+    .card-content {
+      padding: 6%;
+    }
+
+    .card h3 {
+      margin: 0 0 10px;
+      font-size: 20px;
+      color: #333;
+    }
+
+    .card p {
+      font-size: 15px;
+      color: #666;
+      margin: 5px 0;
+    }
+
+    .badge {
+      display: inline-block;
+      padding: 3% 5%;
+      margin: 2% 0;
+      font-size: 14px;
+      border-radius: 20px;
+      background-color: #ff6600;
+      color: white;
+    }
+
+    .add-to-cart-btn {
+      background-color: #ff6600;
+      border: none;
+      color: white;
+      padding: 10px 16px;
+      font-size: 14px;
+      border-radius: 20px;
+      cursor: pointer;
+      margin-top: 10px;
+      transition: background-color 0.3s ease;
+    }
+
+    .add-to-cart-btn:hover {
+      background-color: #e65c00;
+    }
+
+    @media (max-width: 768px) {
+      .card-content {
+        padding: 8%;
+      }
+
+      .card h3 {
+        font-size: 18px;
+      }
+
+      .card p {
+        font-size: 14px;
+      }
+    }
+
+    @media (max-width: 480px) {
+      .card img {
+        height: 180px;
+      }
+
+      .badge {
+        font-size: 12px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="nav-container">
+      <div class="logo">
+        <i>🍴</i> <strong>Online Food</strong>
+      </div>
+      <div class="menu-toggle" id="menu-toggle">☰</div>
+      <nav id="navbar">
+        <ul>
+          <li><a href="#">HOME</a></li>
+          <li><a href="#about-section">ABOUT</a></li>
+          <li><a href="#contact">CONTACT</a></li>
+          <li class="login-dropdown">
+            <a href="#" onclick="logout()">👤 Logout</a>
+            
+          </li>
+          <li>
+            <div id="cart-icon" class="cart-icon">
+              🛒 Cart <span id="cart-count">0</span>
+            </div>
+          </li>
+        </ul>
+      </nav>
+    </div>
+  </header>
+
+  <div class="container">
+    <!-- Cards will be added dynamically -->
+  </div>
+
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/11.5.0/firebase-app.js";
+    import {
+      getFirestore,
+      doc,
+      getDoc,
+    } from "https://www.gstatic.com/firebasejs/11.5.0/firebase-firestore.js";
+
+    const firebaseConfig = {
+      apiKey: "AIzaSyDmv_JzNAjosccdLlhaAvdHidcQXbl2yeE",
+      authDomain: "online-food-ordering-e8513.firebaseapp.com",
+      projectId: "online-food-ordering-e8513",
+      storageBucket: "online-food-ordering-e8513.appspot.com",
+      messagingSenderId: "498101486818",
+      appId: "1:498101486818:web:474691ca84d07b01ebcabb",
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const db = getFirestore(app);
+
+    const queryParams = new URLSearchParams(window.location.search);
+    const restaurantId = queryParams.get("id");
+    if (!restaurantId) {
+      alert("No restaurant ID found in URL!");
+    }
+
+
+    document.addEventListener("DOMContentLoaded", function () {
+        const userData = JSON.parse(localStorage.getItem("owners"));
+        console.log(userData);
+        if (!userData) {
+          alert("No User Found ");
+          window.location.href = "user-login.html";
+        }
+      });
+
+      
+
+    const fetchItems = async () => {
+      try {
+        const docRef = doc(db, "owners", restaurantId);
+        const docSnap = await getDoc(docRef);
+        if (docSnap.exists()) {
+          const data = docSnap.data();
+          const items = data.foodItems || [];
+
+          const container = document.querySelector(".container");
+          if (items.length === 0) {
+            container.innerHTML = "<p>No items available</p>";
+            return;
+          }
+
+          items.forEach(item => {
+            container.innerHTML += `
+              <div class="card">
+                <img src="${item.imageUrl}" alt="Food Image" />
+                <div class="card-content">
+                  <h3>${item.name}</h3>
+                  <span class="badge">${item.type}</span>
+                  <p><strong>Category:</strong> ${item.category}</p>
+                  <p><strong>Price:</strong> ₹${item.price}</p>
+                  <p>${item.description}</p>
+                  <button class="add-to-cart-btn"
+                    data-name="${item.name}"
+                    data-price="${item.price}"
+                    data-image="${item.imageUrl}">
+                    Add Item
+                  </button>
+                </div>
+              </div>`;
+          });
+
+          setTimeout(() => {
+            document.querySelectorAll(".add-to-cart-btn").forEach(button => {
+              button.addEventListener("click", () => {
+                const name = button.getAttribute("data-name");
+                const price = parseFloat(button.getAttribute("data-price"));
+                const image = button.getAttribute("data-image");
+
+                const item = { name, price, image, quantity: 1 };
+
+                let cart = JSON.parse(localStorage.getItem("cart")) || [];
+                const existing = cart.find(i => i.name === name);
+
+                if (existing) {
+                  alert("Item already in cart!");
+                } else {
+                  cart.push(item);
+                  localStorage.setItem("cart", JSON.stringify(cart));
+                  alert(`${name} added to cart!`);
+                  updateCartCount();
+                }
+              });
+            });
+          }, 100);
+        } else {
+          alert("Restaurant not found!");
+        }
+      } catch (error) {
+        console.error("Error fetching items:", error);
+      }
+    };
+
+    fetchItems();
+
+    // Navigate to cart
+    const goToCart = () => {
+      window.location.href = "cart-items.html";
+    };
+
+    document.getElementById("cart-icon").addEventListener("click", goToCart);
+
+    const updateCartCount = () => {
+      const cart = JSON.parse(localStorage.getItem("cart")) || [];
+      document.getElementById("cart-count").innerText = cart.length;
+    };
+
+    updateCartCount();
+  </script>
+
+  <script src="css/cartheader.js">
+  
+  </script>
+  <!-- <script>
+    function logout()
+    {
+      localStorage.removeItem("owners")
+      window.location.href="index.html"
+    } -->
+  <!-- </script> -->
+   <script src="updateCartAndLogout.js"></script>
+</body>
+</html>

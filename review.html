@@ -1,0 +1,256 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Order Summary</title>
+  <link rel="stylesheet" href="./css/headercart.css">
+  <style>
+    /* Same amazing styles as before, keeping it clean, responsive, and classy ✨ */
+    :root {
+      --main-bg: #fff;
+      --accent: #ff6b6b;
+      --light-gray: #f1f1f1;
+      --text-dark: #222;
+      --box-shadow: rgba(0, 0, 0, 0.1) 0px 8px 20px;
+    }
+
+    body {
+      margin: 0;
+      font-family: 'Poppins', sans-serif;
+      background: linear-gradient(120deg, #fff0f0, #fefefe);
+      color: var(--text-dark);
+      padding: 20px;
+    }
+
+    .container {
+      max-width: 960px;
+      margin: auto;
+      background-color: var(--main-bg);
+      border-radius: 20px;
+      padding: 30px;
+      margin-top: 10%;
+      box-shadow: var(--box-shadow);
+      backdrop-filter: blur(5px);
+    }
+
+    h2 {
+      text-align: center;
+      color: var(--accent);
+      margin-bottom: 30px;
+      font-size: 2rem;
+    }
+
+    .section {
+      margin-bottom: 30px;
+    }
+
+    .section-title {
+      font-size: 1.3rem;
+      color: #444;
+      border-left: 5px solid var(--accent);
+      padding-left: 12px;
+      margin-bottom: 15px;
+    }
+
+    .info p {
+      margin: 6px 0;
+      line-height: 1.5;
+      font-size: 0.95rem;
+    }
+
+    .cart-item {
+      background-color: var(--light-gray);
+      padding: 15px 20px;
+      border-radius: 15px;
+      display: flex;
+      justify-content: space-between;
+      margin-bottom: 12px;
+      box-shadow: rgba(0, 0, 0, 0.03) 0px 2px 5px;
+    }
+
+    .cart-item span {
+      font-weight: 500;
+    }
+
+    .total {
+      text-align: right;
+      font-size: 1.2rem;
+      font-weight: 600;
+      color: #111;
+      margin-top: 20px;
+    }
+
+    .btn {
+      width: 100%;
+      padding: 14px;
+      font-size: 1rem;
+      border: none;
+      border-radius: 12px;
+      background: linear-gradient(to right, #ff6b6b, #ff9472);
+      color: white;
+      font-weight: bold;
+      cursor: pointer;
+      box-shadow: rgba(0, 0, 0, 0.08) 0px 4px 12px;
+      transition: all 0.3s ease;
+    }
+
+    .btn:hover {
+      transform: translateY(-2px);
+      background: linear-gradient(to right, #ff5a5a, #ff8069);
+    }
+
+    @media (max-width: 600px) {
+      .cart-item {
+        flex-direction: column;
+        gap: 6px;
+      }
+    }
+  </style>
+</head>
+<body>
+
+
+  <header>
+    <div class="nav-container">
+      <div class="logo">
+        <i>🍴</i> <strong>Online Food</strong>
+      </div>
+      <div class="menu-toggle" id="menu-toggle">☰</div>
+      <nav id="navbar">
+        <ul>
+          <li><a href="#">HOME</a></li>
+          <li><a href="#about-section">ABOUT</a></li>
+          <li><a href="#contact">CONTACT</a></li>
+          <li class="login-dropdown">
+            <a href="#" onclick="logout()">👤 Logout</a>
+            
+          </li>
+          <li>
+            <div id="cart-icon" class="cart-icon">
+              🛒 Cart <span id="cart-count">0</span>
+            </div>
+          </li>
+        </ul>
+      </nav>
+    </div>
+  </header>
+
+
+  <div class="container">
+    <h2>🧾 Order Summary</h2>
+
+    <!-- Address Section -->
+    <div class="section info">
+      <div class="section-title">📍 Delivery Address</div>
+      <p id="name"></p>
+      <p id="phone"></p>
+      <p id="line1"></p>
+      <p id="line2"></p>
+      <p id="city"></p>
+      <p id="postal"></p>
+    </div>
+
+    <!-- Cart Items Section -->
+    <div class="section">
+      <div class="section-title">🛒 Items in Your Cart</div>
+      <div id="cartItems"></div>
+      <div class="total" id="totalAmount"></div>
+    </div>
+
+    <button class="btn" id="placeOrderBtn">✅ Place Order</button>
+  </div>
+
+  <!-- Firebase via npm - JavaScript Module -->
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-app.js";
+    import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-auth.js";
+    import { getFirestore, collection, addDoc } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-firestore.js";
+
+    const firebaseConfig = {
+        apiKey: "AIzaSyDmv_JzNAjosccdLlhaAvdHidcQXbl2yeE",
+  authDomain: "online-food-ordering-e8513.firebaseapp.com",
+  projectId: "online-food-ordering-e8513",
+  storageBucket: "online-food-ordering-e8513.firebasestorage.app",
+  messagingSenderId: "498101486818",
+  appId: "1:498101486818:web:474691ca84d07b01ebcabb",
+  measurementId: "G-WB3NM7E4DZ"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const db = getFirestore(app);
+    const auth = getAuth(app);
+
+    // Load from localStorage
+    const address = JSON.parse(localStorage.getItem("userAddress"));
+    const cart = JSON.parse(localStorage.getItem("cart")) || [];
+
+    // Show address
+    if (address) {
+      document.getElementById("name").textContent = `👤 Name: ${address.name}`;
+      document.getElementById("phone").textContent = `📞 Phone: ${address.phone}`;
+      document.getElementById("line1").textContent = `🏠 ${address.line1}`;
+      document.getElementById("line2").textContent = `${address.line2 || ""}`;
+      document.getElementById("city").textContent = `🏙️ ${address.city}`;
+      document.getElementById("postal").textContent = `📮 ${address.postal}`;
+    }
+
+    // Show cart
+    let total = 0;
+    const cartContainer = document.getElementById("cartItems");
+
+    cart.forEach(item => {
+      const div = document.createElement("div");
+      div.className = "cart-item";
+      div.innerHTML = `
+        <span>🍽️ ${item.name} (x${item.quantity})</span>
+        <span>₹${item.price * item.quantity}</span>
+      `;
+      cartContainer.appendChild(div);
+      total += item.price * item.quantity;
+    });
+
+    document.getElementById("totalAmount").textContent = `Total: ₹${total}`;
+
+    // Order button
+    document.getElementById("placeOrderBtn").addEventListener("click", () => {
+      onAuthStateChanged(auth, async (user) => {
+        console.log(user);
+        
+        if (user) {
+          try {
+            await addDoc(collection(db, "orders"), {
+              userId: user.uid,
+              deliveryAddress: address,
+              items: cart,
+              totalAmount: total,
+              status: "Pending",
+              paymentMethod: "Cash on Delivery",
+              placedAt: new Date().toISOString()
+            });
+            alert("🎉 Order placed successfully!");
+            localStorage.removeItem("cart");
+            window.location.href = "confirm.html";
+          } catch (error) {
+            console.error("Order error:", error);
+            alert("❌ Failed to place order. Try again!");
+          }
+        } else {
+          alert("⚠️ You need to login first!");
+        }
+      });
+    });
+  </script>
+  <script src="css/cartheader.js"></script>
+  <!-- <script>
+    function logout()
+    {
+      localStorage.removeItem("owners")
+      window.location.href="index.html"
+    }
+
+
+  </script> -->
+  <script src="updateCartAndLogout.js"></script>
+</body>
+</html>

@@ -1,0 +1,825 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Online Food Restaurant</title>
+  <link rel="stylesheet" href="css/header.css">
+  <link rel="stylesheet" href="css/home.css">
+  <link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@400;700&display=swap" rel="stylesheet" />
+
+  <!-- Bootstrap CSS CDN Start -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+  <!-- Bootstrap CSS CDN  End -->
+  <link rel="stylesheet" href="css/carousel.cs">
+
+</head>
+<style>
+  /* Global Styles */
+body {
+  font-family: 'Quicksand', sans-serif;
+  margin: 0;
+  padding: 0;
+  /* background: #fffaf6; */
+  color: #333;
+  overflow-x: hidden;
+}
+
+section {
+  padding: 60px 20px;
+}
+
+/* Hero Section */
+.hero {
+  background: linear-gradient(rgba(0,0,0,0.4), rgba(0,0,0,0.4)), url('https://images.unsplash.com/photo-1504674900247-0877df9cc836?auto=format&fit=crop&w=1500&q=80') center/cover no-repeat;
+  text-align: center;
+  color: white;
+  padding: 100px 20px;
+}
+
+.hero p {
+  font-size: 1.5rem;
+  margin: 10px 0;
+}
+
+.hero h2 {
+  font-size: 4rem;
+  margin: 10px 0;
+}
+
+.view-btn {
+  background-color: #ff5e57;
+  border: none;
+  padding: 12px 30px;
+  font-size: 1rem;
+  color: white;
+  border-radius: 25px;
+  cursor: pointer;
+  transition: 0.3s ease;
+}
+
+.view-btn:hover {
+  background-color: #e04e48;
+}
+
+/* Features Section */
+.features {
+  display: flex;
+  justify-content: center;
+  gap: 2rem;
+  flex-wrap: wrap;
+  background: #fdf1ec;
+}
+
+.feature-card {
+  background: white;
+  padding: 20px;
+  border-radius: 16px;
+  width: 280px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
+  text-align: center;
+  transition: 0.3s;
+}
+
+.feature-card:hover {
+  transform: scale(1.05);
+}
+
+.feature-card i {
+  font-size: 2rem;
+}
+
+/* Offers Section */
+.daily-offers {
+  text-align: center;
+}
+
+.daily-offers h2 {
+  margin-bottom: 30px;
+}
+
+.offers-container {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 2rem;
+}
+
+.offer-card {
+  background: white;
+  width: 280px;
+  border-radius: 16px;
+  overflow: hidden;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.08);
+  transition: 0.3s;
+}
+
+.offer-card img {
+  width: 100%;
+  height: 200px;
+  object-fit: cover;
+}
+
+.offer-card:hover {
+  transform: translateY(-10px);
+}
+
+.offer-title {
+  font-weight: bold;
+  padding: 10px;
+  font-size: 1.2rem;
+}
+
+.offer-price {
+  background: #ff5e57;
+  color: white;
+  padding: 8px;
+  border-radius: 0 0 16px 16px;
+}
+
+/* About Section */
+.about-section {
+  background: #fff;
+}
+
+.about-container {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 2rem;
+  justify-content: center;
+  align-items: center;
+}
+
+.about-text {
+  max-width: 500px;
+}
+
+.about-text h2 span {
+  color: #ff5e57;
+}
+
+.about-stats {
+  display: flex;
+  gap: 2rem;
+  margin-top: 20px;
+}
+
+.about-stats h3 {
+  margin: 0;
+  font-size: 1.5rem;
+}
+
+.about-images img {
+  width: 150px;
+  height: 150px;
+  border-radius: 12px;
+  object-fit: cover;
+  margin: 10px;
+}
+
+/* Carousel Section */
+.carousel {
+  background: #ffe7e0;
+  text-align: center;
+}
+
+.carousel h2 {
+  margin-bottom: 30px;
+}
+
+.carousel-images {
+  display: flex;
+  overflow-x: auto;
+  scroll-snap-type: x mandatory;
+  gap: 20px;
+  padding-bottom: 20px;
+}
+
+.carousel-images img {
+  width: 300px;
+  height: 200px;
+  border-radius: 20px;
+  object-fit: cover;
+  scroll-snap-align: start;
+}
+
+/* Footer */
+footer {
+  text-align: center;
+  padding: 20px;
+  background: #222;
+  color: white;
+  font-size: 14px;
+}
+/* Popular Dishes Section */
+.daily-offers {
+  padding: 60px 20px;
+  background-color: #fff8f0;
+  text-align: center;
+}
+.daily-offers h2 {
+  font-size: 2.5em;
+  margin-bottom: 30px;
+  color: #ff6f61;
+}
+.offers-container {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 20px;
+  justify-content: center;
+}
+.offer-card {
+  background: #fff;
+  border-radius: 15px;
+  box-shadow: 0 6px 15px rgba(0, 0, 0, 0.1);
+  width: 280px;
+  transition: transform 0.3s ease;
+}
+.offer-card:hover {
+  transform: translateY(-10px);
+}
+.offer-card img {
+  width: 100%;
+  height: 200px;
+  object-fit: cover;
+  border-top-left-radius: 15px;
+  border-top-right-radius: 15px;
+}
+.offer-title {
+  font-size: 1.3em;
+  margin: 15px 0 5px;
+  color: #333;
+}
+.offer-price {
+  color: #ff6f61;
+  font-weight: bold;
+  margin-bottom: 15px;
+}
+
+/* Testimonials Section */
+.carousel {
+  background: #fef3f3;
+  padding: 60px 20px;
+  text-align: center;
+}
+.carousel h2 {
+  font-size: 2.5em;
+  margin-bottom: 30px;
+  color: #ff4081;
+}
+.carousel-images {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 20px;
+}
+.feature-card {
+  background: white;
+  border-radius: 20px;
+  padding: 25px;
+  width: 280px;
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.08);
+  transition: transform 0.3s ease;
+}
+.feature-card:hover {
+  transform: scale(1.03);
+}
+.feature-card i {
+  font-size: 2.5em;
+  color: #ff4081;
+}
+.feature-card h3 {
+  margin: 10px 0;
+  color: #333;
+}
+.feature-card p {
+  font-size: 0.95em;
+  color: #555;
+}
+
+/* Contact Us Section */
+
+/* General Reset */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: 'Segoe UI', sans-serif;
+  background-color: #f8f8f8;
+  color: #333;
+}
+
+/* Container for centered content */
+.container {
+  width: 90%;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 20px;
+}
+
+/* Section Titles */
+.section-title {
+  text-align: center;
+  font-size: 2.5rem;
+  font-weight: 700;
+  margin-bottom: 30px;
+  color: #333;
+}
+
+/* Contact Section */
+.contact-section {
+  padding: 50px 0;
+  background-color: #ffffff;
+}
+
+.contact-info {
+  display: flex;
+  justify-content: space-around;
+  margin-top: 50px;
+}
+
+.contact-info .info {
+  text-align: center;
+  font-size: 1.1rem;
+}
+
+.contact-info .info h3 {
+  font-size: 1.3rem;
+  font-weight: 600;
+  color: #ff6f61;
+  margin-bottom: 10px;
+}
+
+.contact-form {
+  max-width: 600px;
+  margin: 0 auto;
+  background-color: #f9f9f9;
+  padding: 20px;
+  border-radius: 8px;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+}
+
+.contact-form h3 {
+  font-size: 1.7rem;
+  margin-bottom: 20px;
+  color: #333;
+}
+
+.contact-form label {
+  display: block;
+  font-size: 1rem;
+  margin-bottom: 5px;
+  color: #333;
+}
+
+.contact-form input, .contact-form textarea {
+  width: 100%;
+  padding: 12px;
+  margin-bottom: 15px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  font-size: 1rem;
+  outline: none;
+  transition: border-color 0.3s;
+}
+
+.contact-form input:focus, .contact-form textarea:focus {
+  border-color: #ff6f61;
+}
+
+.contact-form button {
+  padding: 12px 20px;
+  background-color: #ff6f61;
+  color: white;
+  font-size: 1.1rem;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+.contact-form button:hover {
+  background-color: #ff5a4f;
+}
+
+/* Form Response Styles */
+.form-response {
+  margin-top: 20px;
+  padding: 10px;
+  font-size: 1.2rem;
+  font-weight: bold;
+  border-radius: 5px;
+  display: none; /* Initially hidden */
+}
+
+.success {
+  background-color: #d4edda;
+  color: #155724;
+  border: 1px solid #c3e6cb;
+}
+
+.error {
+  background-color: #f8d7da;
+  color: #721c24;
+  border: 1px solid #f5c6cb;
+}
+a{
+  text-decoration: none;
+  color: #333;
+}
+
+/* Mobile Styles */
+@media (max-width: 768px) {
+  .contact-info {
+    flex-direction: column;
+    text-align: center;
+  }
+
+  .contact-info .info {
+    margin-bottom: 20px;
+  }
+
+  .contact-form {
+    width: 90%;
+  }
+}
+
+
+
+/*  */
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .offers-container,
+  .carousel-images,
+  .about-container,
+  .about-stats {
+    flex-direction: column;
+    align-items: center;
+  }
+  .offer-card,
+  .feature-card,
+  .about-stats div {
+    width: 90%;
+  }
+  .about-images {
+    justify-content: center;
+  }
+  .about-images img {
+    max-width: 120px;
+  }
+}
+
+
+
+/* ========== RESPONSIVE MEDIA QUERIES ========== */
+
+@media (max-width: 768px) {
+  .hero h2 {
+    font-size: 2.5rem;
+  }
+
+  .about-container {
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .about-stats {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .carousel-images img {
+    width: 240px;
+    height: 160px;
+  }
+
+  .offer-card {
+    width: 90%;
+  }
+
+  .feature-card {
+    width: 90%;
+  }
+}
+
+@media (max-width: 480px) {
+  .hero h2 {
+    font-size: 2rem;
+  }
+
+  .view-btn {
+    padding: 10px 20px;
+  }
+
+  .carousel-images img {
+    width: 200px;
+    height: 140px;
+  }
+
+  .about-images img {
+    width: 100px;
+    height: 100px;
+  }
+}
+
+</style>
+
+<body>
+  <header>
+    <div class="nav-container">
+      
+      <!-- Logo -->
+      <div class="logo">
+        <i>🍴</i> <strong>Online Food</strong>
+      </div>
+      
+      <!-- Menu Toggle Button for Mobile (no change here) -->
+      <div class="menu-toggle" id="menu-toggle">☰</div>
+      
+      <!-- Navbar (add 'nav' tag and keep the ID as it is) -->
+      <nav id="navbar">
+        <ul>
+          <li><a href="#">HOME</a></li>
+          <li><a href="#about-section">ABOUT</a></li>
+          <li><a href="#contact">CONTACT</a></li>
+          
+          <!-- Login dropdown (just wrap it nicely like below) -->
+          <li class="login-dropdown">
+            <a href="#">👤 Login</a>
+            <div class="dropdown-menu">
+              <a href="user-registration.html">👤 User</a>
+              <a href="../restarurant-register.html">🏪 Restaurant Owner</a>
+              <a href="#" onclick="guestLogin()">🚀 Guest</a> 
+            </div>
+          </li>
+        </ul>
+      </nav>
+  
+    </div>
+  </header>
+  
+  <script>
+     function guestLogin() {
+    // Save guest role in localStorage
+    localStorage.setItem('userRole', 'guest');
+    alert("Logged in as Guest! 🎉 Enjoy exploring our delicious menu! 🍔🍕");
+    window.location.href = "./user-dashboard.html"; 
+  }
+  </script>
+
+
+  <section class="hero" id="hero">
+    <p>Welcome To</p>
+    <h2>Feel Taste</h2>
+    <p>VENUE OF THE BEST FOOD</p>
+    <button class="view-btn" onclick="window.location.href='user-dashboard.html'">VIEW MENU</button>
+
+  </section>
+
+  <section class="features">
+    <div class="feature-card">
+      <i>🛎️</i>
+      <h3><strong>Magical</strong> <span>Atmosphere</span></h3>
+      <p>Wonderful serenity has taken possession of my entire soul, like these sweet mornings</p>
+    </div>
+    <div class="feature-card">
+      <i>🥄</i>
+      <h3><strong>Best Food</strong> <span>Quality</span></h3>
+      <p>Wonderful serenity has taken possession of my entire soul, like these sweet mornings</p>
+    </div>
+    <div class="feature-card">
+      <i>💲</i>
+      <h3><strong>Low Costing</strong> <span>Food</span></h3>
+      <p>Wonderful serenity has taken possession of my entire soul, like these sweet mornings</p>
+    </div>
+    <div class="feature-card">
+      <i>🛎️</i>
+      <h3><strong>Magical</strong> <span>Atmosphere</span></h3>
+      <p>Wonderful serenity has taken possession of my entire soul, like these sweet mornings</p>
+    </div>
+  </section>
+
+  <section class="daily-offers">
+    <h2>Our Daily Offers</h2>
+    <div class="offers-container">
+      <div class="offer-card">
+        <img src="images/sec31.jpg" alt="Spicy Club" />
+        <div class="offer-title">Spicy Club</div>
+        <p>Pork, chicken and vegetable fried rolls served with lettuce wraps</p>
+        <div class="offer-price">$48</div>
+      </div>
+      <div class="offer-card">
+        <img src="images/sec32.jpg" alt="Almond Baked Brie" />
+        <div class="offer-title">Almond Baked Brie</div>
+        <p>Pork, chicken and vegetable fried rolls served with lettuce wraps</p>
+        <div class="offer-price">$58</div>
+      </div>
+      <div class="offer-card">
+        <img src="images/sec33.jpg" alt="Tuscan Flatbread" />
+        <div class="offer-title">Tuscan Flatbread</div>
+        <p>Pork, chicken and vegetable fried rolls served with lettuce wraps</p>
+        <div class="offer-price">$52</div>
+      </div>
+      <div class="offer-card">
+        <img src="images/sec31.jpg" alt="Spicy Club" />
+        <div class="offer-title">Spicy Club</div>
+        <p>Pork, chicken and vegetable fried rolls served with lettuce wraps</p>
+        <div class="offer-price">$48</div>
+      </div>
+    </div>
+  </section>
+
+
+  <section class="section-carousel">
+    <div>
+        <div id="bloodBankCarousel" class="carousel slide carousel-fade" data-bs-ride="carousel"
+            data-bs-interval="3000">
+            <div class="carousel-inner">
+                <div class="carousel-item active">
+                    <img src="https://res.cloudinary.com/dtnv89alf/image/upload/v1744874084/xoaw0nagms3vxuxsgjmn.jpg"
+                        class="d-block w-100" alt="Blood Donation">
+
+                </div>
+                <div class="carousel-item">
+                    <img src="https://res.cloudinary.com/dtnv89alf/image/upload/v1744874157/vfncazardok7izoqpulw.jpg"
+                        class="d-block w-100" alt="Healthcare">
+
+                </div>
+                <div class="carousel-item">
+                    <img src="https://res.cloudinary.com/dtnv89alf/image/upload/v1744874185/agiujhtz3abfhds9vqtr.jpg"
+                        class="d-block w-100" alt="Blood Bank">
+
+                </div>
+            </div>
+
+            <!-- Controls -->
+            <button class="carousel-control-prev" type="button" data-bs-target="#bloodBankCarousel"
+                data-bs-slide="prev">
+                <span class="carousel-control-prev-icon"></span>
+            </button>
+            <button class="carousel-control-next" type="button" data-bs-target="#bloodBankCarousel"
+                data-bs-slide="next">
+                <span class="carousel-control-next-icon"></span>
+            </button>
+
+            <!-- Indicators -->
+            <div class="carousel-indicators">
+                <button type="button" data-bs-target="#bloodBankCarousel" data-bs-slide-to="0"
+                    class="active"></button>
+                <button type="button" data-bs-target="#bloodBankCarousel" data-bs-slide-to="1"></button>
+                <button type="button" data-bs-target="#bloodBankCarousel" data-bs-slide-to="2"></button>
+            </div>
+        </div>
+    </div>
+
+
+</section>
+
+
+
+
+  <section class="about-section" id="about-section">
+    <div class="about-container">
+      <div class="about-text">
+        <h2>Discover <span>Our Story</span></h2>
+        <hr>
+        <p>
+          When while the lovely valley teems with vapour around me, and the meridian sun strikes the upper surface
+          of the impenetrable foliage of my trees, and but a few stray gleams steal into the inner sanctuary,
+          I throw myself down among the tall grass by the trickling stream.
+        </p>
+        <div class="about-stats">
+          <div>
+            <h3>73</h3>
+            <p>Beverages</p>
+          </div>
+          <div>
+            <h3>173</h3>
+            <p>Food Items</p>
+          </div>
+          <div>
+            <h3>66</h3>
+            <p>Cooks</p>
+          </div>
+        </div>
+      </div>
+      <div class="about-images">
+        <img src="images/about.jfif" alt="Dish 1">
+        <img src="images/about2.jpg" alt="Dish 2">
+        <img src="images/about3.jpg" alt="Dish 3">
+      </div>
+    </div>
+  </section>
+
+  
+
+  <!-- contact -->
+
+  <!-- Contact Section -->
+<section id="contact-section" class="contact-section">
+  <div class="container">
+    <h2 class="section-title">Contact Us</h2>
+
+
+    <!-- Contact Form -->
+    <div class="contact-form">
+      <h3>Send us a message</h3>
+      <form id="contact-form" action="#" method="POST">
+        <label for="name">Your Name</label>
+        <input type="text" id="name" name="name" required placeholder="Enter your name">
+        
+        <label for="email">Your Email</label>
+        <input type="email" id="email" name="email" required placeholder="Enter your email">
+        
+        <label for="message">Message</label>
+        <textarea id="message" name="message" rows="4" required placeholder="Enter your message"></textarea>
+        
+        <button type="submit">Send Message</button>
+      </form>
+
+      
+
+      <!-- Form Response Message -->
+      <div id="form-response" class="form-response"></div>
+    </div>
+
+    
+    <div class="contact-info" id="contact">
+      <div class="info">
+        <h3><a href="https://www.google.com/maps?q=123+Food+Street,+Delicious+Town,+Foodland" target="_blank">
+         Our Address
+        </a></h3>
+        <a href="https://www.google.com/maps?q=123+Food+Street,+Delicious+Town,+Foodland" target="_blank">
+          123 Food Street, Delicious Town, Foodland
+        </a>
+      </div>
+      <div class="info">
+        <h3><p><a href="mailto:support@onlinefood.com">Email Us</a></p></h3>
+        <p><a href="mailto:support@onlinefood.com">support@onlinefood.com</a></p>
+      </div>
+      <div class="info">
+        <h3><p><a  href="tel:+1234567890">Call Us</a></p></h3>
+        <p><a  href="tel:+1234567890">+91 9398695456</a></p>
+      </div>
+    </div>
+  </div>
+</section>
+
+  
+
+  <footer>
+    &copy; Developed by Nandini.
+  </footer>
+
+  <script>
+    document.querySelector('.login-dropdown').addEventListener('click', function () {
+      const dropdown = this.querySelector('.dropdown-menu');
+      dropdown.style.display = dropdown.style.display === 'block' ? 'none' : 'block';
+    });
+
+    window.addEventListener('click', function (e) {
+      if (!e.target.closest('.login-dropdown')) {
+        const dropdown = document.querySelector('.dropdown-menu');
+        if (dropdown) dropdown.style.display = 'none';
+      }
+    });
+    
+    
+  </script>
+  <script src="js/header.js"></script>
+
+  <!-- Bootstrap start -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+  <!-- Bootstrap end -->
+  <script>
+    const menuToggle = document.getElementById('menu-toggle');
+    const navbar = document.getElementById('navbar');
+  
+    menuToggle.addEventListener('click', () => {
+      navbar.classList.toggle('active');
+    });
+  </script>
+
+
+  <!-- contact -->
+  <script>
+    // Handle form submission
+    const form = document.getElementById('contact-form');
+    const responseContainer = document.getElementById('form-response');
+  
+    form.addEventListener('submit', function(event) {
+      event.preventDefault(); // Prevent form from submitting traditionally
+      
+      
+      responseContainer.textContent = "Thank you for reaching out! We will get back to you soon.";
+      responseContainer.classList.add('success');
+      responseContainer.style.display = 'block';
+    });
+  </script>
+  
+</body>
+</html>

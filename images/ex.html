@@ -1,0 +1,444 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Online Food Restaurant</title>
+  <link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@400;700&display=swap" rel="stylesheet" />
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Quicksand', sans-serif;
+    }
+
+    body {
+      background-color: #fff;
+      color: #333;
+    }
+
+    header {
+      background: #000;
+      color: #fff;
+      padding: 2% 0;
+    }
+
+    .nav-container {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      width: 90%;
+      margin: auto;
+    }
+
+    .logo {
+      display: flex;
+      align-items: center;
+      font-size: 1.5em;
+    }
+
+    .logo i {
+      color: #c69c6d;
+      margin-right: 5%;
+    }
+
+    nav ul {
+      list-style: none;
+      display: flex;
+      gap: 5%;
+    }
+
+    nav ul li a {
+      color: white;
+      text-decoration: none;
+      font-weight: bold;
+    }
+
+    .login-dropdown {
+      position: relative;
+      display: inline-block;
+    }
+
+    .login-btn {
+      background-color: #c69c6d;
+      color: #fff;
+      padding: 0.6em 1.2em;
+      font-weight: bold;
+      border: none;
+      cursor: pointer;
+    }
+
+    .login-options {
+      display: none;
+      position: absolute;
+      right: 0;
+      background-color: white;
+      min-width: 100%;
+      width: 180px;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+      z-index: 1;
+    }
+
+    .login-options a {
+      color: #333;
+      padding: 10px;
+      display: block;
+      text-decoration: none;
+      font-weight: 600;
+    }
+
+    .login-options a:hover {
+      background-color: #f5f5f5;
+    }
+
+    .login-dropdown:hover .login-options {
+      display: block;
+    }
+
+    .hero {
+      background: url('./glass.jpeg') no-repeat center center/cover;
+      height: 90vh;
+      color: white;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      text-align: center;
+      padding: 5%;
+    }
+
+    .hero h2 {
+      font-size: 3em;
+    }
+
+    .hero p {
+      font-size: 1.5em;
+      margin-bottom: 1.5em;
+    }
+
+    .view-btn {
+      background-color: #c69c6d;
+      padding: 0.8em 2em;
+      color: white;
+      font-weight: bold;
+      border: none;
+      cursor: pointer;
+    }
+
+    .features {
+      width: 90%;
+      margin: 5% auto;
+      display: flex;
+      justify-content: space-between;
+      gap: 3%;
+    }
+
+    .feature-card {
+      background-color: #fff;
+      border: 1px solid #ddd;
+      padding: 5%;
+      text-align: center;
+      flex: 1;
+      box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    }
+
+    .feature-card i {
+      font-size: 2em;
+      color: #c69c6d;
+      margin-bottom: 5%;
+      display: block;
+    }
+
+    .feature-card h3 {
+      font-size: 1.2em;
+      margin-bottom: 5%;
+    }
+
+    .feature-card span {
+      color: #c69c6d;
+    }
+
+    .feature-card p {
+      font-size: 1em;
+      color: #555;
+    }
+
+    .daily-offers {
+      width: 90%;
+      margin: 5% auto;
+    }
+
+    .daily-offers h2 {
+      text-align: center;
+      font-size: 2em;
+      margin-bottom: 5%;
+    }
+
+    .offers-container {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 3%;
+      justify-content: space-between;
+    }
+
+    .offer-card {
+      background-color: #fff;
+      border: 1px solid #ccc;
+      padding: 3%;
+      width: 30%;
+      box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    }
+
+    .offer-card img {
+      width: 100%;
+      height: auto;
+      margin-bottom: 5%;
+    }
+
+    .offer-title {
+      font-size: 1.2em;
+      font-weight: bold;
+      margin-bottom: 3%;
+    }
+
+    .offer-price {
+      font-size: 1.1em;
+      color: #c69c6d;
+      font-weight: bold;
+    }
+
+    .about-section {
+      padding: 5%;
+      background-color: #fff;
+    }
+
+    .about-container {
+      width: 90%;
+      margin: auto;
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+    }
+
+    .about-text {
+      flex: 1;
+      min-width: 45%;
+      padding-right: 5%;
+    }
+
+    .about-text h2 {
+      font-size: 2em;
+      font-weight: 700;
+      color: #333;
+      margin-bottom: 5%;
+    }
+
+    .about-text h2 span {
+      color: #c69c6d;
+    }
+
+    .about-text hr {
+      width: 30%;
+      border: 2px solid #c69c6d;
+      margin: 5% 0;
+    }
+
+    .about-text p {
+      font-size: 1.1em;
+      color: #333;
+      margin-bottom: 5%;
+      line-height: 1.6;
+    }
+
+    .about-stats {
+      display: flex;
+      gap: 10%;
+      flex-wrap: wrap;
+    }
+
+    .about-stats div {
+      text-align: center;
+    }
+
+    .about-stats div h3 {
+      font-size: 1.8em;
+      font-weight: bold;
+      color: #c69c6d;
+    }
+
+    .about-stats div p {
+      font-size: 1em;
+      font-weight: bold;
+      color: #000;
+    }
+
+    .about-images {
+      flex: 1;
+      min-width: 45%;
+      display: flex;
+      justify-content: center;
+      gap: 3%;
+      margin-top: 5%;
+    }
+
+    .about-images img {
+      width: 30%;
+      height: auto;
+      object-fit: cover;
+    }
+
+    footer {
+      background-color: #222;
+      color: white;
+      text-align: center;
+      padding: 2%;
+      margin-top: 5%;
+    }
+
+    @media screen and (max-width: 768px) {
+      .nav-container {
+        flex-direction: column;
+        gap: 10px;
+      }
+
+      nav ul {
+        flex-direction: column;
+        align-items: center;
+        gap: 10px;
+      }
+
+      .features,
+      .offers-container,
+      .about-container,
+      .about-stats {
+        flex-direction: column;
+        align-items: center;
+      }
+
+      .feature-card,
+      .offer-card,
+      .about-text,
+      .about-images {
+        width: 100% !important;
+        padding: 0;
+      }
+
+      .about-images {
+        flex-direction: column;
+      }
+
+      .about-images img {
+        width: 100%;
+      }
+    }
+  </style>
+</head>
+<body>
+  <!-- Header and Navigation -->
+  <header>
+    <div class="nav-container">
+      <div class="logo">
+        <i class="fas fa-utensils"></i>Foodie
+      </div>
+      <nav>
+        <ul>
+          <li><a href="#">Home</a></li>
+          <li><a href="#features">Features</a></li>
+          <li><a href="#offers">Offers</a></li>
+          <li><a href="#about">About</a></li>
+        </ul>
+      </nav>
+      <div class="login-dropdown">
+        <button class="login-btn">Login</button>
+        <div class="login-options">
+          <a href="user-dashboard.html">Login as User</a>
+          <a href="restaurant-dashboard.html">Login as Restaurant Owner</a>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <!-- Hero Section -->
+  <section class="hero">
+    <h2>Delicious Food Delivered To You</h2>
+    <p>Explore daily offers and order from your favorite restaurants.</p>
+    <button class="view-btn">View Menu</button>
+  </section>
+
+  <!-- Features Section -->
+  <section class="features" id="features">
+    <div class="feature-card">
+      <i class="fas fa-truck"></i>
+      <h3><span>Fast</span> Delivery</h3>
+      <p>Get your food delivered quickly and hot!</p>
+    </div>
+    <div class="feature-card">
+      <i class="fas fa-star"></i>
+      <h3><span>Top</span> Rated</h3>
+      <p>Only the best restaurants near you.</p>
+    </div>
+    <div class="feature-card">
+      <i class="fas fa-utensils"></i>
+      <h3><span>Wide</span> Choices</h3>
+      <p>Enjoy a variety of cuisines and dishes.</p>
+    </div>
+  </section>
+
+  <!-- Daily Offers Section -->
+  <section class="daily-offers" id="offers">
+    <h2>Today's Specials</h2>
+    <div class="offers-container">
+      <div class="offer-card">
+        <img src="./dish1.jpg" alt="Dish 1">
+        <div class="offer-title">Grilled Chicken</div>
+        <div class="offer-price">$12.99</div>
+      </div>
+      <div class="offer-card">
+        <img src="./dish2.jpg" alt="Dish 2">
+        <div class="offer-title">Pasta Primavera</div>
+        <div class="offer-price">$10.99</div>
+      </div>
+      <div class="offer-card">
+        <img src="./dish3.jpg" alt="Dish 3">
+        <div class="offer-title">Veggie Delight</div>
+        <div class="offer-price">$8.99</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- About Section -->
+  <section class="about-section" id="about">
+    <div class="about-container">
+      <div class="about-text">
+        <h2>Discover <span>Our Story</span></h2>
+        <hr>
+        <p>At Foodie, we're passionate about bringing delicious meals right to your doorstep. Our platform connects food lovers with their favorite local restaurants quickly and easily.</p>
+        <div class="about-stats">
+          <div>
+            <h3>100+</h3>
+            <p>Restaurants</p>
+          </div>
+          <div>
+            <h3>5000+</h3>
+            <p>Happy Customers</p>
+          </div>
+        </div>
+      </div>
+      <div class="about-images">
+        <img src="./about1.jpg" alt="Chef 1">
+        <img src="./about2.jpg" alt="Chef 2">
+        <img src="./about3.jpg" alt="Chef 3">
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer>
+    &copy; 2025 Foodie. All rights reserved.
+  </footer>
+
+  <!-- Icons -->
+  <script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
+</body>
+</html>

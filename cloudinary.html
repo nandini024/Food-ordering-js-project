@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cloudinary Upload</title>
+</head>
+
+<body>
+
+    <h2>Select an Image to Upload</h2>
+    <input type="file" id="fileInput" />
+    <button onclick="uploadImage()">Upload</button>
+    <p id="imageUrl"></p>
+
+    <script>
+        function uploadImage() {
+            const fileInput = document.getElementById('fileInput');
+            const file = fileInput.files[0];
+
+            const formData = new FormData();
+            formData.append("file", file);
+            formData.append("upload_preset", "restaurant_profile"); // 👈 Your upload preset
+
+            // 👇 Replace YOUR_CLOUD_NAME with your real cloud name
+            fetch("https://api.cloudinary.com/v1_1/dtnv89alf/image/upload", {
+                method: "POST",
+                body: formData
+            })
+                .then(res => res.json())
+                .then(data => {
+                    console.log("Cloudinary Response:", data);
+                    const imageUrl = data.secure_url;
+                    document.getElementById("imageUrl").innerHTML = `
+          <strong>Image URL:</strong> <a href="${imageUrl}" target="_blank">${imageUrl}</a><br>
+          <img src="${imageUrl}" width="200"/>
+        `;
+                })
+                .catch(err => {
+                    console.error("Upload Failed:", err);
+                    document.getElementById("imageUrl").innerText = "Upload failed. Check the console for details.";
+                });
+        }
+    </script>
+
+</body>
+
+</html>

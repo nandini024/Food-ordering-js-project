@@ -1,0 +1,348 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>🍕 Cutie's Food Cart</title>
+  <link rel="stylesheet" href="css/headercart.css">
+  
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+    .goto-btn-container {
+      text-align: center;
+      margin-top: -10px;
+      margin-bottom: 20px;
+      z-index: 5;
+      position: relative;
+    }
+
+    #gotoItemsBtn {
+      background-color: #ff5e57;
+      color: white;
+      border: none;
+      padding: 12px 24px;
+      font-size: 1rem;
+      border-radius: 12px;
+      cursor: pointer;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+      transition: background-color 0.3s ease, transform 0.2s ease;
+    }
+
+    #gotoItemsBtn:hover {
+      background-color: #e74c3c;
+      transform: scale(1.05);
+    }
+
+    #placeOrderBtn {
+      background-color: #27ae60;
+      color: white;
+      border: none;
+      padding: 12px 24px;
+      font-size: 1rem;
+      border-radius: 12px;
+      cursor: pointer;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+      transition: background-color 0.3s ease, transform 0.2s ease;
+    }
+
+    #placeOrderBtn:hover {
+      background-color: #219150;
+      transform: scale(1.05);
+    }
+
+    @media (max-width: 768px) {
+      #gotoItemsBtn {
+        font-size: 0.9rem;
+        padding: 10px 20px;
+      }
+
+      #placeOrderBtn {
+        font-size: 0.9rem;
+        padding: 10px 20px;
+      }
+    }
+
+    h1, h2 {
+      text-align: center;
+      color: #ff5e57;
+    }
+
+    #menu {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(40%, 1fr));
+      gap: 2%;
+      margin: 2% auto;
+      max-width: 90%;
+    }
+
+    .item-card {
+      background: #fff;
+      border-radius: 20px;
+      padding: 4%;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+      transition: transform 0.2s ease;
+    }
+
+    .item-card:hover {
+      transform: scale(1.02);
+    }
+
+    .item-card h3 {
+      color: #222;
+      margin-bottom: 1%;
+    }
+
+    .item-card p {
+      font-size: 100%;
+      margin: 1% 0;
+    }
+
+    .item-card button {
+      background-color: #ff5e57;
+      color: white;
+      border: none;
+      padding: 3% 6%;
+      border-radius: 8px;
+      cursor: pointer;
+      font-weight: bold;
+      width: 100%;
+      margin-top: 3%;
+    }
+
+    #cartContainer {
+      max-width: 80%;
+      margin: 0 auto;
+      background: #fff;
+      padding: 4%;
+      border-radius: 20px;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.08);
+    }
+
+    .cart-item {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-bottom: 1px dashed #ccc;
+      padding: 2% 0;
+    }
+
+    .cart-item-info {
+      flex: 1;
+    }
+
+    .quantity-control {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .quantity-control button {
+      padding: 5px 10px;
+      font-size: 16px;
+      background-color: #ff5e57;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+
+    #totalPrice {
+      text-align: center;
+      font-size: 1.5rem;
+      color: #27ae60;
+      margin-top: 2%;
+    }
+
+    @media (max-width: 768px) {
+      .item-card {
+        padding: 5%;
+      }
+
+      #menu {
+        grid-template-columns: 100%;
+      }
+
+      .quantity-control button {
+        font-size: 14px;
+      }
+
+      .item-card button {
+        font-size: 1rem;
+        padding: 10px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="nav-container">
+      <nav>
+        <ul>
+          <li><a href="index.html">Home</a></li>
+          <li><a href="index.html"> About</a></li>
+          <li><a href="index.html"> Contact</a></li>
+          <li class="login-dropdown">
+            <a href="#">👤 Login</a>
+            <div class="dropdown-menu">
+              <a href="../user-dashboard.html">👤 User</a>
+              <a href="../restarurant-register.html">🏪 Restaurant Owner</a>
+            </div>
+          </li>
+        </ul>
+      </nav>
+    </div>
+  </header>
+
+  <!-- Go to Items Button -->
+  <div style="text-align: center; margin-top: 20px;">
+    <button id="gotoItemsBtn"><a href="user-dashboard.html" style="text-decoration: none; color: white;">🛒 Go to Your Items</a></button>
+  </div>
+
+  <!-- Menu Items will be shown here -->
+  <div id="menu"></div>
+
+  <hr>
+
+  <h2>🛒 Your Cart</h2>
+  <div id="cartContainer"></div>
+  <div id="totalPrice"></div>
+
+  <!-- Place Order Button -->
+  <div style="text-align: center; margin-top: 20px;">
+    <button id="placeOrderBtn">✅ Place Order</button>
+  </div>
+
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/11.5.0/firebase-app.js";
+    import {
+      getFirestore,
+      collection,
+      getDocs
+    } from "https://www.gstatic.com/firebasejs/11.5.0/firebase-firestore.js";
+
+    const firebaseConfig = {
+      apiKey: "AIzaSyDmv_JzNAjosccdLlhaAvdHidcQXbl2yeE",
+      authDomain: "online-food-ordering-e8513.firebaseapp.com",
+      projectId: "online-food-ordering-e8513",
+      storageBucket: "online-food-ordering-e8513.appspot.com",
+      messagingSenderId: "498101486818",
+      appId: "1:498101486818:web:474691ca84d07b01ebcabb",
+      measurementId: "G-WB3NM7E4DZ",
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const db = getFirestore(app);
+
+    const menuDiv = document.getElementById("menu");
+
+    const restaurantsRef = collection(db, "restaurants");
+    getDocs(restaurantsRef).then(snapshot => {
+      snapshot.forEach(doc => {
+        const restaurant = doc.data();
+        const restaurantName = restaurant.name || "Unknown Restaurant";
+
+        if (Array.isArray(restaurant.items)) {
+          restaurant.items.forEach(item => {
+            if (item.name && item.price != null) {
+              const price = Number(item.price);
+              showItem(item.name, price, restaurantName);
+            }
+          });
+        }
+      });
+    });
+
+    function showItem(name = "Unnamed", price = 0, restaurantName = "Unknown") {
+      const itemCard = document.createElement("div");
+      itemCard.className = "item-card";
+      itemCard.innerHTML = `
+        <h3>${name}</h3>
+        <p>From: <strong>${restaurantName}</strong></p>
+        <p>Price: ₹${price}</p>
+        <button onclick="addToCart('${name}', ${price})">Add to Cart</button>
+      `;
+      menuDiv.appendChild(itemCard);
+    }
+
+    window.addToCart = function(itemName, itemPrice) {
+      let cart = JSON.parse(localStorage.getItem("cart")) || [];
+      const existingItem = cart.find(item => item.itemName === itemName);
+      if (existingItem) {
+        existingItem.quantity += 1;
+      } else {
+        cart.push({ itemName, itemPrice, quantity: 1 });
+      }
+      localStorage.setItem("cart", JSON.stringify(cart));
+      displayCart();
+    }
+
+    window.displayCart = function() {
+      const cart = JSON.parse(localStorage.getItem("cart")) || [];
+      const cartContainer = document.getElementById("cartContainer");
+      cartContainer.innerHTML = "";
+
+      cart.forEach((item, index) => {
+        const itemDiv = document.createElement("div");
+        itemDiv.className = "cart-item";
+        itemDiv.innerHTML = `
+          <div class="cart-item-info">
+            <strong>${item.itemName}</strong><br>
+            ₹${item.itemPrice} × ${item.quantity} = ₹${item.itemPrice * item.quantity}
+          </div>
+          <div class="quantity-control">
+            <button onclick="updateQuantity(${index}, -1)">-</button>
+            <span>${item.quantity}</span>
+            <button onclick="updateQuantity(${index}, 1)">+</button>
+          </div>
+        `;
+        cartContainer.appendChild(itemDiv);
+      });
+
+      calculateTotal();
+    }
+
+    window.updateQuantity = function(index, change) {
+      let cart = JSON.parse(localStorage.getItem("cart")) || [];
+      if (cart[index]) {
+        cart[index].quantity += change;
+        if (cart[index].quantity <= 0) {
+          cart.splice(index, 1);
+        }
+        localStorage.setItem("cart", JSON.stringify(cart));
+        displayCart();
+      }
+    }
+
+    function calculateTotal() {
+      const cart = JSON.parse(localStorage.getItem("cart")) || [];
+      let total = 0;
+      cart.forEach(item => {
+        total += item.itemPrice * item.quantity;
+      });
+      document.getElementById("totalPrice").innerText = `Total Price: ₹${total}`;
+    }
+
+    document.getElementById("placeOrderBtn").addEventListener("click", () => {
+      const cart = JSON.parse(localStorage.getItem("cart")) || [];
+      if (cart.length === 0) {
+        alert("Your cart is empty! Add some delicious items 🍕");
+        return;
+      }
+
+      alert("🎉 Your order has been placed successfully! Thank you for choosing Cutie's Food Cart 💖");
+
+      localStorage.removeItem("cart");
+      displayCart();
+    });
+
+    window.onload = displayCart;
+  </script>
+
+  <script>
+    window.scrollToCart = function() {
+      document.getElementById("cartContainer").scrollIntoView({ behavior: "smooth" });
+    }
+  </script>
+</body>
+</html>

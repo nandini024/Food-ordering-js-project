@@ -1,0 +1,250 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Shopping Cart</title>
+  <style>
+    body {
+      font-family: 'Segoe UI', sans-serif;
+      background-color: #fff5f0;
+      margin: 0;
+      padding: 20px;
+    }
+
+    .cart-container {
+      max-width: 800px;
+      margin: 0 auto;
+      background-color: #fff;
+      padding: 25px;
+      border-radius: 20px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+    }
+
+    .cart-item {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      border-bottom: 1px solid #eee;
+      padding: 15px 0;
+    }
+
+    .cart-item img {
+      width: 80px;
+      height: 80px;
+      object-fit: cover;
+      border-radius: 10px;
+    }
+
+    .item-details {
+      flex: 1;
+      margin-left: 15px;
+    }
+
+    .item-details h3 {
+      margin: 0;
+      font-size: 20px;
+    }
+
+    .item-details p {
+      margin: 5px 0;
+    }
+
+    .quantity-controls {
+      display: flex;
+      align-items: center;
+    }
+
+    .quantity-controls button {
+      padding: 5px 10px;
+      font-size: 18px;
+      cursor: pointer;
+      margin: 0 5px;
+    }
+
+    .total {
+      text-align: right;
+      font-size: 24px;
+      margin-top: 20px;
+      font-weight: bold;
+    }
+
+    #placeOrderBtn {
+      display: block;
+      width: 100%;
+      background-color: #ff5e57;
+      color: white;
+      padding: 15px;
+      border: none;
+      font-size: 18px;
+      border-radius: 15px;
+      margin-top: 25px;
+      cursor: pointer;
+    }
+
+    #orderPopup {
+      display: none;
+      position: fixed;
+      top: 0; left: 0; right: 0; bottom: 0;
+      background: rgba(0, 0, 0, 0.6);
+      z-index: 1000;
+      padding: 30px;
+    }
+
+    #orderPopup form {
+      background-color: #fff;
+      padding: 30px;
+      max-width: 500px;
+      margin: 80px auto;
+      border-radius: 15px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+    }
+
+    #orderPopup textarea,
+    #orderPopup select {
+      width: 100%;
+      padding: 10px;
+      margin-top: 10px;
+      margin-bottom: 20px;
+      border-radius: 10px;
+      border: 1px solid #ccc;
+    }
+
+    #orderPopup button {
+      background-color: #27ae60;
+      color: white;
+      padding: 12px 20px;
+      border: none;
+      border-radius: 10px;
+      cursor: pointer;
+      font-size: 16px;
+    }
+
+  </style>
+</head>
+<body>
+  <div class="cart-container">
+    <h1>Your Cart 🛒</h1>
+    <div id="cartItems"></div>
+    <div class="total" id="totalPrice">Total: ₹0</div>
+    <button id="placeOrderBtn">Place Order</button>
+  </div>
+
+  <!-- Address & Payment Popup -->
+  <div id="orderPopup">
+    <form id="orderForm">
+      <h2 style="color: #ff5e57;">Enter Delivery & Payment Info</h2>
+      
+      <label>📍 Delivery Address:</label><br />
+      <textarea id="address" rows="3" required placeholder="Type your full address..."></textarea>
+
+      <label>💳 Payment Method:</label><br />
+      <select id="payment" required>
+        <option value="">-- Select Payment Method --</option>
+        <option value="COD">Cash on Delivery</option>
+        <option value="UPI">UPI</option>
+        <option value="Card">Credit/Debit Card</option>
+      </select>
+
+      <button type="submit">🚀 Confirm Order</button>
+    </form>
+  </div>
+
+  <script>
+    const cartItemsContainer = document.getElementById("cartItems");
+    const totalPriceElement = document.getElementById("totalPrice");
+
+    function displayCart() {
+      const cart = JSON.parse(localStorage.getItem("cart")) || [];
+      cartItemsContainer.innerHTML = "";
+      let total = 0;
+
+      cart.forEach((item, index) => {
+        const itemDiv = document.createElement("div");
+        itemDiv.className = "cart-item";
+
+        const img = document.createElement("img");
+        img.src = item.image;
+        itemDiv.appendChild(img);
+
+        const detailsDiv = document.createElement("div");
+        detailsDiv.className = "item-details";
+
+        const name = document.createElement("h3");
+        name.textContent = item.name;
+        detailsDiv.appendChild(name);
+
+        const price = document.createElement("p");
+        price.textContent = "₹" + item.price;
+        detailsDiv.appendChild(price);
+
+        itemDiv.appendChild(detailsDiv);
+
+        const quantityDiv = document.createElement("div");
+        quantityDiv.className = "quantity-controls";
+
+        const decrement = document.createElement("button");
+        decrement.textContent = "-";
+        decrement.onclick = () => {
+          if (item.quantity > 1) {
+            item.quantity--;
+            localStorage.setItem("cart", JSON.stringify(cart));
+            displayCart();
+          }
+        };
+
+        const quantity = document.createElement("span");
+        quantity.textContent = item.quantity;
+
+        const increment = document.createElement("button");
+        increment.textContent = "+";
+        increment.onclick = () => {
+          item.quantity++;
+          localStorage.setItem("cart", JSON.stringify(cart));
+          displayCart();
+        };
+
+        quantityDiv.appendChild(decrement);
+        quantityDiv.appendChild(quantity);
+        quantityDiv.appendChild(increment);
+        itemDiv.appendChild(quantityDiv);
+
+        cartItemsContainer.appendChild(itemDiv);
+
+        total += item.price * item.quantity;
+      });
+
+      totalPriceElement.textContent = "Total: ₹" + total;
+    }
+
+    displayCart();
+
+    document.getElementById("placeOrderBtn").addEventListener("click", () => {
+      const cart = JSON.parse(localStorage.getItem("cart")) || [];
+      if (cart.length === 0) {
+        alert("Your cart is empty! Add some yummy items 😋");
+        return;
+      }
+      document.getElementById("orderPopup").style.display = "block";
+    });
+
+    document.getElementById("orderForm").addEventListener("submit", function (e) {
+      e.preventDefault();
+
+      const address = document.getElementById("address").value.trim();
+      const payment = document.getElementById("payment").value;
+
+      if (!address || !payment) {
+        alert("Please fill in both address and payment method.");
+        return;
+      }
+
+      alert(`🎉 Order Placed!\n\n📍 Address: ${address}\n💳 Payment: ${payment}\n\nThank you for ordering with Cutiee! 🥰`);
+
+      localStorage.removeItem("cart");
+      document.getElementById("orderPopup").style.display = "none";
+      displayCart();
+    });
+  </script>
+</body>
+</html>

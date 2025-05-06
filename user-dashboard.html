@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Restaurants Near You</title>
+  <link rel="stylesheet" href="css/headercart.css">
+</head>
+<body>
+  <header>
+    <div class="nav-container">
+      <div class="logo">
+        <i>🍴</i> <strong>Online Food</strong>
+      </div>
+      <div class="menu-toggle" id="menu-toggle">☰</div>
+      <nav id="navbar">
+        <ul>
+          <li><a href="#">HOME</a></li>
+          <li><a href="#about-section">ABOUT</a></li>
+          <li><a href="#contact">CONTACT</a></li>
+          <li class="login-dropdown">
+            <a href="#" onclick="logout()">👤 Logout</a>
+            
+          </li>
+          <li>
+            <div id="cart-icon" class="cart-icon">
+              🛒 Cart <span id="cart-count">0</span>
+            </div>
+          </li>
+        </ul>
+      </nav>
+    </div>
+  </header>
+  
+  
+  <h1 style="text-align:center;">Restaurants Near You</h1>
+  <div id="restaurants-container" style="display:flex; flex-wrap:wrap; gap:20px; justify-content:center;"></div>
+
+  <script type="module">
+    // Firebase SDK imports
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/11.5.0/firebase-app.js";
+    import { getFirestore, collection, getDocs } from "https://www.gstatic.com/firebasejs/11.5.0/firebase-firestore.js";
+
+    const firebaseConfig = {
+      apiKey: "AIzaSyDmv_JzNAjosccdLlhaAvdHidcQXbl2yeE",
+      authDomain: "online-food-ordering-e8513.firebaseapp.com",
+      projectId: "online-food-ordering-e8513",
+      storageBucket: "online-food-ordering-e8513.appspot.com",
+      messagingSenderId: "498101486818",
+      appId: "1:498101486818:web:474691ca84d07b01ebcabb"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const db = getFirestore(app);
+    const container = document.getElementById("restaurants-container");
+
+     document.addEventListener("DOMContentLoaded",function()
+    {
+      const userData=JSON.parse(localStorage.getItem("owners"))
+      console.log(userData);
+      if(!userData)
+    {
+      alert("No User Found ")
+      window.location.href="user-login.html"
+    }
+
+    })
+
+     
+
+
+
+    async function fetchRestaurants() {
+      const querySnapshot = await getDocs(collection(db, "owners"));
+      querySnapshot.forEach(doc => {
+        const data = { id: doc.id, ...doc.data() }; 
+
+        if(data.role==="restaurantowner")
+      {
+
+        
+      
+      console.log(data.role);
+      
+        // ✅ Add doc.id to data
+
+        const card = document.createElement("div");
+        card.style.cssText = `
+          border:1px solid #ccc;
+          border-radius:12px;
+          padding:16px;
+          width:320px;
+          background:#fff;
+          box-shadow:0 4px 8px rgba(0,0,0,0.1);
+        `;
+
+        // ✅ Create menu HTML
+        const menuHTML = (data.menuItems || []).map(item => `
+          <div style="display:flex; align-items:center; gap:10px;">
+            <img src="${item.image}" alt="${item.name}" style="width:60px; height:60px; object-fit:cover; border-radius:6px;">
+            <div>
+              <p style="margin:0;"><strong>${item.name}</strong></p>
+              <p style="margin:0;">₹${item.price}</p>
+            </div>
+          </div>
+        `).join('');
+
+        // ✅ Final HTML for each restaurant
+        card.innerHTML = `
+          <img src="${data.restaurantImage}" alt="Restaurant Image" style="width:100%; height:200px; object-fit:cover; border-radius:8px;">
+          <h2 style="color:#ff6600;">${data.restaurantName}</h2>
+          <p><strong>Rating:</strong> ${data.restaurantRating || 'N/A'}</p>
+          <p><strong>Location:</strong> ${data.restaurantLocation}</p>
+          <p><strong>Email:</strong> ${data.email}</p>
+          <div style="margin-top:12px;">
+            
+            <button style="margin-top:12px; padding:8px 12px; border:none; background:#ff6600; color:white; border-radius:8px; cursor:pointer;" onclick="viewItems('${data.id}')">View Items</button>
+          </div>
+        `;
+
+        container.appendChild(card);
+      }
+      });
+    }
+
+    fetchRestaurants();
+
+    // ✅ Navigate to item page with id in query param
+    window.viewItems = (id) => {
+      console.log("Restaurant ID:", id);
+      window.location.href = `user-display-items.html?id=${id}`;
+    };
+  </script>
+  <script src="css/cartheader.js"></script>
+  <!-- <script>
+    function logout()
+    {
+      localStorage.removeItem("owners")
+      window.location.href="index.html"
+    }
+
+   
+  </script> -->
+  <script src="updateCartAndLogout.js"></script>
+  
+</body>
+</html>

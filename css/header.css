@@ -1,0 +1,162 @@
+/* Reset & Base */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+body {
+  font-family: 'Arial', sans-serif;
+}
+
+/* Sticky Header */
+header {
+  position: sticky;
+  top: 0;
+  width: 100%;
+  background: #ff6f61;
+  z-index: 999;
+}
+
+.nav-container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 15px 30px;
+}
+
+.logo {
+  color: white;
+  font-size: 1.5em;
+}
+
+/* Navigation */
+nav ul {
+  display: flex;
+  list-style: none;
+  gap: 20px;
+}
+
+nav ul li a {
+  color: white;
+  text-decoration: none;
+  font-weight: bold;
+  padding: 8px 10px;
+  display: block;
+}
+
+/* Dropdown */
+.login-dropdown {
+  position: relative;
+}
+
+.login-dropdown .dropdown-menu {
+  display: none;
+  position: absolute;
+  top: 35px;
+  background: #fff;
+  border-radius: 5px;
+  box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+}
+
+.login-dropdown:hover .dropdown-menu {
+  display: block;
+}
+
+.login-dropdown .dropdown-menu a {
+  color: #333;
+  padding: 10px 15px;
+  display: block;
+}
+
+/* Hamburger Menu */
+.menu-toggle {
+  display: none;
+  font-size: 1.8rem;
+  color: white;
+  cursor: pointer;
+}
+
+/* Responsive */
+/* @media (max-width: 768px) {
+  .menu-toggle {
+    display: block;
+  }
+
+  nav {
+    position: absolute;
+    top: 70px;
+    left: 0;
+    width: 100%;
+    background: #ff6f61;
+    display: none;
+    flex-direction: column;
+    align-items: center;
+  }
+
+  nav ul {
+    flex-direction: column;
+    width: 100%;
+    padding: 10px 0;
+  }
+
+  nav ul li {
+    text-align: center;
+    width: 100%;
+  }
+
+  nav.active {
+    display: flex;
+  }
+
+  .login-dropdown:hover .dropdown-menu {
+    position: static;
+    box-shadow: none;
+    background: #fff;
+  }
+} */
+
+@media (max-width: 768px) {
+  .menu-toggle {
+    display: block;
+  }
+
+  nav {
+    position: absolute;
+    top: 65px; /* just below header */
+    left: 0;
+    background-color: #ff6f61;
+    width: 100%;
+    display: none;
+    flex-direction: column;
+    align-items: center;
+    border-radius: 0 0 10px 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  }
+
+  nav ul {
+    flex-direction: column;
+    width: 100%;
+  }
+
+  nav ul li {
+    width: 100%;
+    text-align: center;
+    padding: 10px 0;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.3);
+  }
+
+  nav.active {
+    display: flex;
+  }
+
+  .login-dropdown:hover .dropdown-menu {
+    position: static;
+    background: #fff;
+    box-shadow: none;
+    width: 100%;
+  }
+
+  .login-dropdown .dropdown-menu a {
+    color: #333;
+  }
+}
