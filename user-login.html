@@ -7,7 +7,7 @@
     <script type="module" src="firebase-config.js"></script>
     <script type="module" src="auth.js"></script>
     <link rel="stylesheet" href="styles.css" />
-    <link rel="stylesheet" href="css/header.css">
+    <link rel="stylesheet" href="css/header.css" />
     <!-- Linking external CSS -->
   </head>
   <style>
@@ -77,22 +77,19 @@
   <body>
     <header>
       <div class="nav-container">
-        
         <!-- Logo -->
-        <div class="logo">
-          <i>🍴</i> <strong>Online Food</strong>
-        </div>
-        
+        <div class="logo"><i>🍴</i> <strong>Online Food</strong></div>
+
         <!-- Menu Toggle Button for Mobile (no change here) -->
         <div class="menu-toggle" id="menu-toggle">☰</div>
-        
+
         <!-- Navbar (add 'nav' tag and keep the ID as it is) -->
         <nav id="navbar">
           <ul>
             <li><a href="./index.html">HOME</a></li>
             <li><a href="./index.html">ABOUT</a></li>
             <li><a href="#">CONTACT</a></li>
-            
+
             <!-- Login dropdown (just wrap it nicely like below) -->
             <li class="login-dropdown">
               <a href="#">👤 Login</a>
@@ -103,7 +100,6 @@
             </li>
           </ul>
         </nav>
-    
       </div>
     </header>
 
@@ -171,12 +167,9 @@
       const auth = getAuth(appAuth);
       const db = getFirestore(appStore);
 
-      
       // Get form elements
       const signupForm = document.querySelector("form");
       console.log(signupForm);
-
-      
 
       signupForm.addEventListener("submit", async (e) => {
         e.preventDefault();
@@ -210,11 +203,9 @@
             // }
 
             console.log(ownerResponse);
-            
 
             alert(`Login successful! Welcome ${ownerResponse.restaurantName}`);
-            window.location.href="user-dashboard.html"
-           
+            window.location.href = "user-dashboard.html";
           } else {
             alert("Login successful, but no additional user data found!");
             window.location.href = "user-registration.html";
