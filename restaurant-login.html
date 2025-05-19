@@ -125,6 +125,8 @@
             placeholder="Enter your Password"
             required
           />
+          <a href="restaurant-reset.html">Forgot password</a>
+          
           <p id="match"></p>
           <button type="submit">Login</button>
         </form>
@@ -190,12 +192,13 @@
             const ownerResponse = ownerData.data();
             localStorage.setItem("owners", JSON.stringify(ownerResponse));
 
-            let isFirstTime = localStorage.getItem(
-              `firstRestaurantLogin-${user.uid}`
-            );
-            console.log(isFirstTime);
-            if (!isFirstTime) {
-              localStorage.setItem(`firstRestaurantLogin-${user.uid}`, "true");
+            // let isFirstTime = localStorage.getItem(
+            //   `firstRestaurantLogin-${user.uid}`
+            // );
+            // console.log(isFirstTime);
+
+            if (!ownerResponse.hasUpdateDetails) {
+              // localStorage.setItem(`firstRestaurantLogin-${user.uid}`, "true");
               window.location.href = "restaurant-dashboard.html";
             } else {
               window.location.href = "restaurant-data-display.html";
@@ -219,5 +222,6 @@
       });
     </script>
     <script src="header1.js"></script>
+    
   </body>
 </html>

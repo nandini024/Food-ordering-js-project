@@ -195,6 +195,7 @@ nav a:hover {
   }
 
   .cart-icon {
+    width: 40%;
     align-self: flex-end;
     margin-top: 15px;
   }

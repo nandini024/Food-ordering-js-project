@@ -119,12 +119,14 @@
             placeholder="Enter your Password"
             required
           />
+                    <a href="user-reset.html">Forgot Password</a>
           <p id="match"></p>
           <button type="submit">Login</button>
         </form>
         <p>
           Don't have an account?
           <a href="user-registration.html">Register Here</a>
+
         </p>
       </div>
     </div>
@@ -202,6 +204,7 @@
             //   window.location.href = "user-dashboard.html";
             // }
 
+            
             console.log(ownerResponse);
 
             alert(`Login successful! Welcome ${ownerResponse.restaurantName}`);
